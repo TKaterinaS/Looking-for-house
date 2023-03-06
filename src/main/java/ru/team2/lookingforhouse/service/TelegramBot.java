@@ -24,11 +24,14 @@ public class TelegramBot extends TelegramLongPollingBot {
         List<BotCommand> listOfCommands = new ArrayList<>();
         listOfCommands.add(new BotCommand("/start", "Приветствует пользователя"));
         listOfCommands.add(new BotCommand("/info", "Выводит информацию о приюте"));
+        listOfCommands.add(new BotCommand("/to_adopt", "Выводит информацию о том, как взять питомца из приюта"));
+        listOfCommands.add(new BotCommand("/submit_report", "Выводит информацию о том, как прислать отчет о питомце"));
+        listOfCommands.add(new BotCommand("/call_volunteer", "Вызвать волотера"));
         try {
             this.execute(new SetMyCommands(listOfCommands, new BotCommandScopeDefault(), null));
         }
         catch (TelegramApiException e) {
-            log.error("Error occurred: " + e.getMessage());
+            //log.error("Error occurred: " + e.getMessage());
         }
     }
 
