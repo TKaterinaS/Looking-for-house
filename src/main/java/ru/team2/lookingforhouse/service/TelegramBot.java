@@ -21,6 +21,8 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     public TelegramBot(BotConfig config) {
         this.config = config;
+        /** Создание кнопки меню
+         * (все команды должны быть написаны в нижнем регистре)*/
         List<BotCommand> listOfCommands = new ArrayList<>();
         listOfCommands.add(new BotCommand("/start", "Приветствует пользователя"));
         listOfCommands.add(new BotCommand("/info", "Выводит информацию о приюте"));
@@ -31,7 +33,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             this.execute(new SetMyCommands(listOfCommands, new BotCommandScopeDefault(), null));
         }
         catch (TelegramApiException e) {
-            //log.error("Error occurred: " + e.getMessage());
+            log.error("Error occurred: " + e.getMessage());
         }
     }
 
