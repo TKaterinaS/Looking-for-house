@@ -39,8 +39,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         listOfCommands.add(new BotCommand("/call_volunteer", "Вызвать волотера"));
         try {
             this.execute(new SetMyCommands(listOfCommands, new BotCommandScopeDefault(), null));
-        }
-        catch (TelegramApiException e) {
+        } catch (TelegramApiException e) {
             log.error("Error occurred: " + e.getMessage());
         }
     }
@@ -59,18 +58,26 @@ public class TelegramBot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
             String messageText = update.getMessage().getText();
-            long chatId = update.getMessage().getChatId();
+            String userName = update.getMessage().getChat().getFirstName();
+            String chatId = update.getMessage().getChatId().toString();
 
             switch (messageText) {
                 case "/start":
                     registerUser(update.getMessage());
                     startCommandReceived(chatId, update.getMessage().getChat().getFirstName());
                     break;
+//                    выполнение команды /call_volunteer
+                case "/call_volunteer":
+                    sendMsgToVolunteer(chatId, userName);
+//                    дефолтное сообщение, если бот получит неизвестную ему команду
+                default:
+                    sendMessage(chatId, "Нераспознанная команда, попробуйте ещё раз");
             }
+        }
     }
-}
+
     private void registerUser(Message msg) {
-        if (userRepository.findById(msg.getChatId()).isEmpty()){
+        if (userRepository.findById(msg.getChatId()).isEmpty()) {
             var chatId = msg.getChatId();
             var chat = msg.getChat();
             User user = new User();
@@ -80,27 +87,32 @@ public class TelegramBot extends TelegramLongPollingBot {
             user.setUserName(chat.getUserName());
             user.setRegisteredAt(new Timestamp(System.currentTimeMillis()));
             userRepository.save(user);
-            log.info("user saved: "+user);
+            log.info("user saved: " + user);
         }
     }
 
-    private void startCommandReceived(long chatId, String name) {
+    private void startCommandReceived(String chatId, String name) {
         String answer = "HI, " + name + ",nice to meet you!";
         log.info("Replied to user " + name);
         sendMessage(chatId, answer);
 
     }
 
-    private void sendMessage(long chatid, String textToSend) {
-        SendMessage message = new SendMessage();
-        message.setChatId(chatid);
-        message.setText(textToSend);
+    private void sendMessage(String chatId, String textToSend) {
+        SendMessage message = new SendMessage(chatId, textToSend);
 
         try {
             execute(message);
         } catch (TelegramApiException e) {
             log.error("Error occurred: " + e.getMessage());
         }
+    }
+//    метод, который вызывается при выполнении команды /call_volunteer
+    private void sendMsgToVolunteer(String chatId, String name) {
+        String answer = "Привет, сейчас ты в роли волонтёра. Тебя вызвал по кнопке \"Вызвать волонтёра\" пользователь по имени "
+        + name + ", с айди " + chatId;
+//        волонтёром пока работает у нас Евгений
+        sendMessage("198498708", answer);
     }
 }
 
