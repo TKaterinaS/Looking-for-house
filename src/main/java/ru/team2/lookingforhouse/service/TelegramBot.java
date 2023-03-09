@@ -69,6 +69,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 //                    выполнение команды /call_volunteer
                 case "/call_volunteer":
                     sendMsgToVolunteer(chatId, userName);
+                    break;
 //                    дефолтное сообщение, если бот получит неизвестную ему команду
                 default:
                     sendMessage(chatId, "Нераспознанная команда, попробуйте ещё раз");
@@ -107,12 +108,21 @@ public class TelegramBot extends TelegramLongPollingBot {
             log.error("Error occurred: " + e.getMessage());
         }
     }
-//    метод, который вызывается при выполнении команды /call_volunteer
+  /**  метод, который вызывается при выполнении команды /call_volunteer */
     private void sendMsgToVolunteer(String chatId, String name) {
-        String answer = "Привет, сейчас ты в роли волонтёра. Тебя вызвал по кнопке \"Вызвать волонтёра\" пользователь по имени "
-        + name + ", с айди " + chatId;
-//        волонтёром пока работает у нас Евгений
-        sendMessage("198498708", answer);
+//        генерируем рандомный чат-айди одного из волонтёров
+        String randomChatId = generateRandomChatId();
+//        прописываем сообщение, которое будет отправлено волонтёру
+        String answer = "Требуется консультация волонтёра для пользователя по имени "
+        + name + ". Чат-айди пользователя - " + chatId;
+//        отправляем сообщение рандомно-выбранному волонтёру
+        sendMessage(randomChatId, answer);
+    }
+/** метод, который генерирует рандомный чат-айди одного из волонтёров */
+    private String generateRandomChatId() {
+        List<String> chatIdList = List.of("956120008", "198498708", "921797425", "1911144874", "1837692225", "5242769604");
+        int randValue = (int) (Math.random() * chatIdList.size());
+        return chatIdList.get(randValue);
     }
 }
 
