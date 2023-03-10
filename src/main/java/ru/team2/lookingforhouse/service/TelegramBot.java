@@ -49,7 +49,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         this.config = config;
         /** Создание кнопки меню
          * (все команды должны быть написаны в нижнем регистре)*/
-       /* List<BotCommand> listOfCommands = new ArrayList<>();
+        List<BotCommand> listOfCommands = new ArrayList<>();
         listOfCommands.add(new BotCommand("/start", "Приветствует пользователя"));
         listOfCommands.add(new BotCommand("/info", "Выводит информацию о приюте"));
         listOfCommands.add(new BotCommand("/to_adopt", "Выводит информацию о том, как взять питомца из приюта"));
@@ -59,7 +59,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             this.execute(new SetMyCommands(listOfCommands, new BotCommandScopeDefault(), null));
         } catch (TelegramApiException e) {
             log.error("Error occurred: " + e.getMessage());
-        }*/
+        }
     }
 
     @Override
