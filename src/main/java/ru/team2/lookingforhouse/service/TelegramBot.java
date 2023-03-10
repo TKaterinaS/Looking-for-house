@@ -13,7 +13,6 @@ import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScope
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.team2.lookingforhouse.config.BotConfig;
 import ru.team2.lookingforhouse.model.User;
-import ru.team2.lookingforhouse.model.UserRepository;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
