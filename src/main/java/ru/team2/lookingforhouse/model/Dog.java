@@ -6,47 +6,45 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-/**
- * Class of dogs
- * autor Tokan Ekaterina
- */
+/** Класс "Dog" (Собака)*/
 
-/** Replace class with a table in the database */
+/** Аннотация @Entity определяет, что класс может быть сопоставлен таблице.
+ * И это все, это просто маркер, как, например, сериализуемый интерфейс. */
 @Entity
 
-/** Generates an all-args constructor. */
+/** Генерирует конструктор всех аргументов.
+ * Конструктор, содержащий все аргументы, требует одного аргумента для каждого поля в классе. */
 @AllArgsConstructor
 
-/** Generate a constructor with no parameters. */
+/** Генерирует конструктор без параметров. */
 @NoArgsConstructor
 
-/** Convenient shortcut annotation that bundles the features of
- * @ToString, @EqualsAndHashCode, @Getter/@Setter
- * and @RequiredArgsConstructor together
- */
+/** Сокращенная аннотация, которая объединяет функции
+ * @ToString, @EqualsAndHashCode, @Getter/@Setter и @RequiredArgsConstructor вместе. */
 @Data
-public class Dog extends Animal{
+public class Dog {
 
-	    /** Hibernate will look at the names and types of fields.*/
+	    /** Hibernate просмотрит имена и типы полей.*/
 	    @Id
 
-		/** Hibernate delegates the installation of the ID to the database level */
-		@GeneratedValue
+		/** Hibernate делегирует установку ID на уровень базы данных. */
+		@GeneratedValue(strategy = GenerationType.IDENTITY)
 
-		/** "ID" field*/
+		/** Поле "Идентификатор" животного, который присваивается Базой Данных */
 		private Long id;
 
-		/** "Breed" field */
+	    /** Поле "Порода" животного  */
 		private String breed;
 
-		/** "Name" field */
+	    /** Поле "Имя" животного  */
 		private String name;
 
-		/** "Year Of Birth" field */
+	    /** Поле "Год рождения" животного  */
 		private int yearOfBirth;
 
-		/** "Description" field */
+		/** Поле "Описание" */
 		private String description;
 }

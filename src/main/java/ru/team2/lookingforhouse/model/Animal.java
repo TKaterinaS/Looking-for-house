@@ -7,58 +7,55 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-/**
- * Class of dogs
- * autor Tokan Ekaterina
- */
+/** Класс "Animal" (Животное)*/
 
-/** Replace class with a table in the database */
+/** Аннотация @Entity определяет, что класс может быть сопоставлен таблице.
+ * И это все, это просто маркер, как, например, сериализуемый интерфейс. */
 @Entity(name = "animalDataTable")
 
-/** Generates an all-args constructor. */
+/** Генерирует конструктор всех аргументов.
+ * Конструктор, содержащий все аргументы, требует одного аргумента для каждого поля в классе. */
 @AllArgsConstructor
 
-/** Generate a constructor with no parameters. */
+/** Генерирует конструктор без параметров. */
 @NoArgsConstructor
 
-/** Convenient shortcut annotation that bundles the features of
- * @ToString, @EqualsAndHashCode, @Getter/@Setter
- * and @RequiredArgsConstructor together
- */
+/** Сокращенная аннотация, которая объединяет функции
+ * @ToString, @EqualsAndHashCode, @Getter/@Setter и @RequiredArgsConstructor вместе. */
 @Data
 
 public class Animal {
 
-	/** Hibernate will look at the names and types of fields.*/
+	/** Hibernate просмотрит имена и типы полей.*/
 	@Id
 
-	/** "ID" field*/
+	/** Поле "Идентификатор", который присваивается Базой Данных */
 	private Long id;
 
-	/** "Name" field */
+	/** Поле "Имя" животного */
 	private String name;
 
-	/** "age" field */
+	/** Поле "Возраст" животного */
 	private int age;
 
-	/** "gender" field */
+	/** Поле "Пол" животного */
 	private String gender;
 
-	/** "petType" field */
+	/** Поле "Тип животного" (кошка/собака) */
 	private String petType;
 
-	/** Specifies a single-valued association to another entity class
-	 * that has many-to-one multiplicity. */
+	/** Задает однозначную ассоциацию с другим классом сущностей,
+	 *  который имеет множественность "многие к одному". */
 	@ManyToOne(fetch = FetchType.LAZY)
 
-	/** Specifies a column for joining an entity association
-	 * or element collection. */
+	/** Задает столбец для присоединения к ассоциации объектов или коллекции элементов.
+	 *  Если JoinColumn сама аннотация по умолчанию,
+	 *  предполагается один объединенный столбец и применяются значения по умолчанию. */
 	@JoinColumn(name = "user_id", nullable = false)
 
-	/** Manages the forward part of the reference and the fields
-	 * marked by this annotation are the ones that get Serialised */
+	/** Это прямая часть ссылки, которая обычно сериализуется. */
 	@JsonManagedReference
 
-	/** "User user" field */
+	/** Поле "Пользователя" используещее ссылку на класс "User" ("Пользователь") */
 	private User user;
 }
