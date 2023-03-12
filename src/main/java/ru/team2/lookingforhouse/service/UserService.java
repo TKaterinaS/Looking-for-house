@@ -4,16 +4,15 @@ import lombok.extern.log4j.Log4j2;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.springframework.stereotype.Service;
-import ru.team2.lookingforhouse.hibernate.HibernateSessionFactoryUtil;
+import ru.team2.lookingforhouse.exception.UserNotFoundException;
 import ru.team2.lookingforhouse.model.User;
 import ru.team2.lookingforhouse.repository.UserRepository;
+import java.util.Collection;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import java.util.List;
-import java.util.Optional;
+
 /**
- * Класс сервиса пользователя.
+ * Класс сервиса объекта "Пользователь"
+ *
  * @author Одокиенко Екатерина
  */
 
@@ -35,109 +34,72 @@ public class UserService {
     }
 
     /**
-     * Метод получения пользователя по чат-айди, который присваивается Телеграмм-ботом
+     * Метод получения объекта "Пользователь" по чат-айди, который присваивается Телеграмм-ботом
      * @param chatId
-     * @return возвращает пользователя, обернутого в {@link Optional}
+     * @return  {@link UserRepository#findByChatId(Long)}
      * @see UserService
      */
-    public Optional<User> getByChatId(Long chatId) {
+    public Collection<User> getByChatId(Long chatId) {
         log.info("Вы вызвали метод получения пользователя по chatId={}", chatId);
-        try (Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession()) {
-//        return this.userRepository.getByChatId(chatId);
-            return Optional.ofNullable(session.get(User.class, chatId));
-        }
+        return this.userRepository.findByChatId(chatId);
     }
 
     /**
-     * Метод получения пользователя по айди, который присваивается Базой Данных
+     * Метод получения объекта "Пользователь" по айди, который присваивается Базой Данных
      * @param id
-     * @return возвращает объект, обернутый в {@link Optional}
+     * @return {@link UserRepository#findById(Object)}
      * @see UserService
      */
-    public Optional<User> getById(Long id) {
-        log.info("Вы вызвали метод получения пользователя по id={}", id);
-//        return this.userRepository.findById(id)
-//                .orElseThrow(UserNotFoundException::new);
-        try (Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession()) {
-            return Optional.ofNullable(session.get(User.class, id));
-        }
+    public User getById(Long id) {
+        log.info("Вы вызвали метод получения объекта \"Пользователь\" по id={}", id);
+        return this.userRepository.findById(id).orElseThrow(UserNotFoundException::new);
     }
 
     /**
-     * Метод создания пользователя
+     * Метод создания объекта "Пользователь"
      * @param user
      * @return {@link UserRepository#save(Object)}
      * @see UserService
      */
     public User create(User user) {
-        log.info("Вы вызвали метод создания пользователя");
-//        return this.userRepository.save(user);
-        try (Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession()) {
-            Transaction transaction = session.beginTransaction();
-            session.save(user);
-            transaction.commit();
-        }
-        return user;
+        log.info("Вы вызвали метод создания объекта \"Пользователь\"");
+        return this.userRepository.save(user);
     }
 
     /**
-     * Метод редактирования пользователя
+     * Метод редактирования объекта "Пользователь"
      * @param user
      * @return {@link UserRepository#save(Object)}
      * @see UserService
      */
     public User update(User user) {
-        log.info("Вы вызвали метод редактирования пользователя");
-//        if (user.getId() != null) {
-//            if (getById(user.getId()) != null) {
-//                return this.userRepository.save(user);
-//            }
-//        }
-//        throw new UserNotFoundException();
-
+        log.info("Вы вызвали метод редактирования объекта \"Пользователь\"");
         if (user.getId() != null) {
-            if (getById(user.getId()).isPresent()) ;
+            if (getById(user.getId()) != null) {
+                return this.userRepository.save(user);
+            }
         }
-        EntityManager entityManager = HibernateSessionFactoryUtil.getSessionFactory().createEntityManager();
-        EntityTransaction entityTransaction = entityManager.getTransaction();
-        entityTransaction.begin();
-        User updated = entityManager.merge(user);
-        entityTransaction.commit();
-        return updated;
+        throw new UserNotFoundException();
     }
 
     /**
-     * Метод получения списка всех пользователей
+     * Метод получения списка всех пользователей у объекта "Пользователь"
      * @return {@link UserRepository#findAll()}
      * @see UserService
      */
-    public List<User> getAll() {
-        log.info("Вы вызвали метод получения всех пользователей");
-//        return (List<User>) this.userRepository.findAll();
-        try (Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession()) {
-            return session.createQuery("From userDataTable", User.class).list();
-        }
+    public Collection<User> getAll() {
+        log.info("Вы вызвали метод получения всех пользователей у объекта \"Пользователь\"");
+        return (Collection<User>) this.userRepository.findAll();
     }
 
     /**
-     * Метод удаления пользователя по айди, который присваиваектся Базой Данных
-     * @param user
-     * @return возвращает объект, обернутый в {@link Optional}
+     * Метод удаления объекта "Пользователь" по айди, который присваиваектся Базой Данных
+     * @param id
+     * @return  {@link UserRepository#deleteById(Object)}
      * @see UserService
      */
-    public Optional<User> delete(User user) {
-        log.info("Вы вызвали метод удаления пользователя");
-//        this.userRepository.deleteById(id);
-        Optional<User> optionalUser = getById(user.getId());
-        if (optionalUser.isPresent()) {
-            try (Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession()) {
-                Transaction transaction = session.beginTransaction();
-                session.delete(optionalUser.get());
-                transaction.commit();
-                return optionalUser;
-            }
-        }
-        return Optional.empty();
+    public void deleteById(Long id) {
+        log.info("Вы вызвали метод удаления объекта \"Пользователь\"по id={}",id);
+        this.userRepository.deleteById(id);
     }
-
 }

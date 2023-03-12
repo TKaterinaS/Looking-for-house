@@ -1,30 +1,31 @@
 package ru.team2.lookingforhouse.service;
 
 import lombok.extern.log4j.Log4j2;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.springframework.stereotype.Service;
-import ru.team2.lookingforhouse.hibernate.HibernateSessionFactoryUtil;
+import ru.team2.lookingforhouse.exception.AnimalNotFoundException;
 import ru.team2.lookingforhouse.model.Animal;
 import ru.team2.lookingforhouse.repository.AnimalRepository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import java.util.List;
+import java.util.Collection;
 import java.util.Optional;
 
 /**
- * Класс сервиса животного.
+ * Класс сервиса объекта "Животное"
+ *
  * @author Одокиенко Екатерина
  */
 
-/** Платформа для регистрации сообщений в Java */
+/**
+ * Платформа для регистрации сообщений в Java
+ */
 @Log4j2
 /** Сервис для реализации бизнес-логики */
 @Service
 public class AnimalService {
 
-    /** Поле создания слоя репозитория */
+    /**
+     * Поле создания слоя репозитория
+     */
     private final AnimalRepository animalRepository;
 
     /**
@@ -37,93 +38,68 @@ public class AnimalService {
     }
 
     /**
-     * Метод получения животного по айди, который присваивается Базой Данных
+     * Метод получения объекта "Животное" по айди, который присваивается Базой Данных
+     *
      * @param id
-     * @return возвращает объект, обернутый в {@link Optional}
-     * @see UserService
+     * @return {@link AnimalRepository#findById(Object)}
+     * @see AnimalService
+     * @exception AnimalNotFoundException
      */
-    public Optional<Animal> getById(Long id) {
-        log.info("Вы вызвали метод получения животного по id={}", id);
-//        return this.animalRepository.findById(id).orElseThrow(AnimalNotFoundException::new);
-        try (Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession()) {
-            return Optional.ofNullable(session.get(Animal.class, id));
-        }
+    public Animal getById(Long id) {
+        log.info("Вы вызвали метод получения объекта \"Животное\" по id={}", id);
+        return this.animalRepository.findById(id).orElseThrow(AnimalNotFoundException::new);
     }
 
     /**
-     * Метод создания животного
+     * Метод создания объекта "Животное"
+     *
      * @param animal
      * @return {@link AnimalRepository#save(Object)}
      * @see AnimalService
      */
     public Animal create(Animal animal) {
-        log.info("Вы вызвали метод создания животного");
-//        return this.animalRepository.save(animal);
-        try (Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession()) {
-            Transaction transaction = session.beginTransaction();
-            session.save(animal);
-            transaction.commit();
-        }
-        return animal;
+        log.info("Вы вызвали метод создания объекта \"Животное\"");
+        return this.animalRepository.save(animal);
     }
 
     /**
-     * Метод редактирования животного
+     * Метод редактирования объекта "Животное"
+     *
      * @param animal
      * @return {@link AnimalRepository#save(Object)}
      * @see AnimalService
+     * @exception AnimalNotFoundException
      */
     public Animal update(Animal animal) {
-        log.info("Вы вызвали метод редактирования животного");
-//        if (animal.getId() != null) {
-//            if (getById(animal.getId()) != null) {
-//                return this.animalRepository.save(animal);
-//            }
-//        }
-//        throw new AnimalNotFoundException();
+        log.info("Вы вызвали метод редактирования объекта \"Животное\"");
         if (animal.getId() != null) {
-            if (getById(animal.getId()).isPresent()) ;
+            if (getById(animal.getId()) != null) {
+                return this.animalRepository.save(animal);
+            }
         }
-        EntityManager entityManager = HibernateSessionFactoryUtil.getSessionFactory().createEntityManager();
-        EntityTransaction entityTransaction = entityManager.getTransaction();
-        entityTransaction.begin();
-        Animal updated = entityManager.merge(animal);
-        entityTransaction.commit();
-        return updated;
+        throw new AnimalNotFoundException();
     }
 
     /**
-     * Метод получения списка всех животных
+     * Метод получения списка всех животных у объекта "Животное"
+     *
      * @return {@link AnimalRepository#findAll()}
      * @see AnimalService
      */
-    public List<Animal> getAll() {
-        log.info("Вы вызвали метод получения всех животных");
-//        return this.animalRepository.findAll();
-        try (Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession()) {
-            return session.createQuery("From animalDataTable", Animal.class).list();
-        }
+    public Collection<Animal> getAll() {
+        log.info("Вы вызвали метод получения всех животных у объекта \"Животное\"");
+        return this.animalRepository.findAll();
     }
 
     /**
-     * Метод удаления пользователя по айди, который присваивается Базой Данных
+     * Метод удаления объекта "Животное" по айди, который присваивается Базой Данных
      *
-     * @param animal
-     * @return возвращает объект, обернутый в {@link Optional}
+     * @param id
+     * @return {@link AnimalRepository#deleteById(Object)}
      * @see UserService
      */
-    public Optional<Animal> delete(Animal animal) {
-        log.info("Вы вызвали метод удаления животного");
-//        this.animalRepository.deleteById(id);
-        Optional<Animal> optionalAnimal = getById(animal.getId());
-        if (optionalAnimal.isPresent()) {
-            try (Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession()) {
-                Transaction transaction = session.beginTransaction();
-                session.delete(optionalAnimal.get());
-                transaction.commit();
-                return optionalAnimal;
-            }
-        }
-        return Optional.empty();
+    public void deleteById(Long id) {
+        log.info("Вы вызвали метод удаления объекта \"Животное\" по id={}", id);
+        this.animalRepository.deleteById(id);
     }
 }

@@ -7,46 +7,49 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.team2.lookingforhouse.model.User;
 import ru.team2.lookingforhouse.service.UserService;
-import ru.team2.lookingforhouse.service.ValidateService;
 
-@Tag(name = "USER", description = "API для пользователя")
+/**
+ * Класс контроллера объекта "Пользователь"
+ *
+ * @author Одокиенко Екатерина
+ */
+
+
+@Tag(name = "USER", description = "API для объекта \"Пользователь\"")
 @RestController
 @RequestMapping("user")
 public class UserController {
     private final UserService userService;
-    private final ValidateService validateService;
 
-    public UserController(UserService userService, ValidateService validateService) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.validateService = validateService;
     }
 
-    @Operation(summary = "Получение пользователя по id",
+    @Operation(summary = "Получение объекта \"Пользователь\" по id",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "Пользователь, найденный по id",
+                            description = "Объект \"Пользователь\", найденный по id",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(implementation = User.class)
                             )
                     ),
                     @ApiResponse(responseCode = "400",
-                            description = "Пользователя по данному id не нашли!")
+                            description = "Объект \"Пользователь\" по данному id не найден!")
             }
     )
     @GetMapping("/{id}")
-    public ResponseEntity<User> getById(@Parameter(description = "id пользователя", example = "956120008L")
-                                        @PathVariable Long id) {
-        return ResponseEntity.of(userService.getById(id));
+    public User getById(@Parameter(description = "id объекта \"Пользователь\"", example = "956120008L")
+                        @PathVariable Long id) {
+        return userService.getById(id);
     }
 
-    @Operation(summary = "Создание пользователя",
+    @Operation(summary = "Создание объекта \"Пользователь\"",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "Созданный пользователь",
+                    description = "Созданный объекта \"Пользователь\"",
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = User.class)
@@ -54,11 +57,7 @@ public class UserController {
             )
     )
     @PostMapping()
-    public ResponseEntity<User> create(@RequestBody User user) {
-        if (validateService.isNotValid(user)) {
-            return ResponseEntity.badRequest().build();
-        }
-        return ResponseEntity.ok(userService.create(user));
+    public User create(@RequestBody User user) {
+        return this.userService.create(user);
     }
-
 }

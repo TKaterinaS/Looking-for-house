@@ -1,32 +1,29 @@
 package ru.team2.lookingforhouse.service;
 
 import lombok.extern.log4j.Log4j2;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.springframework.stereotype.Service;
-//import ru.team2.lookingforhouse.exception.CatNotFoundException;
-import ru.team2.lookingforhouse.hibernate.HibernateSessionFactoryUtil;
-import ru.team2.lookingforhouse.model.Animal;
+import ru.team2.lookingforhouse.exception.CatNotFoundException;
 import ru.team2.lookingforhouse.model.Cat;
 import ru.team2.lookingforhouse.repository.CatRepository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import java.util.List;
-import java.util.Optional;
+import java.util.Collection;
 
 /**
- * Класс сервиса объекта "Кошка".
+ * Класс сервиса объекта "Кот".
  *
  * @author Одокиенко Екатерина
  */
 
-/** Платформа для регистрации сообщений в Java */
+/**
+ * Платформа для регистрации сообщений в Java
+ */
 @Log4j2
 /** Сервис для реализации бизнес-логики */
 @Service
 public class CatService {
-    /** Поле создания слоя репозитория */
+    /**
+     * Поле создания слоя репозитория
+     */
     private final CatRepository catRepository;
 
     /**
@@ -39,95 +36,68 @@ public class CatService {
     }
 
     /**
-     * Метод получения кошки по айди, который присваивается Базой Данных
+     * Метод получения объекта "Кот" по айди, который присваивается Базой Данных
      *
      * @param id
-     * @return возвращает объект, обернутый в {@link Optional}
+     * @return {@link CatRepository#findById(Object)}
+     * @throws CatNotFoundException
      * @see CatService
      */
-    public Optional<Cat> getById(Long id) {
-        log.info("Вы вызвали метод получения кошки по id={}", id);
-//        return this.catRepository.findById(id).orElseThrow(CatNotFoundException::new);
-        try (Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession()) {
-            return Optional.ofNullable(session.get(Cat.class, id));
-        }
+    public Cat getById(Long id) {
+        log.info("Вы вызвали метод получения объекта \"Кот\" по id={}", id);
+        return this.catRepository.findById(id).orElseThrow(CatNotFoundException::new);
     }
 
     /**
-     * Метод создания кошки
+     * Метод создания объекта "Кот"
      *
      * @param cat
      * @return {@link CatRepository#save(Object)}
      * @see CatService
      */
     public Cat create(Cat cat) {
-        log.info("Вы вызвали метод создания кошки");
-//        return this.catRepository.save(cat);
-        try (Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession()) {
-            Transaction transaction = session.beginTransaction();
-            session.save(cat);
-            transaction.commit();
-        }
-        return cat;
+        log.info("Вы вызвали метод создания объекта \"Кот\"");
+        return this.catRepository.save(cat);
     }
 
     /**
-     * Метод редактирования кошки
+     * Метод редактирования объекта "Кот"
      *
      * @param cat
      * @return {@link CatRepository#save(Object)}
+     * @throws CatNotFoundException
      * @see CatService
      */
     public Cat update(Cat cat) {
-        log.info("Вы вызвали метод редактирования кошки");
-//        if (cat.getId() != null) {
-//            if (getById(cat.getId()) != null) {
-//                return this.catRepository.save(cat);
-//            }
-//        }
-//        throw new CatNotFoundException();
+        log.info("Вы вызвали метод редактирования объекта \"Кот\"");
         if (cat.getId() != null) {
-            if (getById(cat.getId()).isPresent()) ;
+            if (getById(cat.getId()) != null) {
+                return this.catRepository.save(cat);
+            }
         }
-        EntityManager entityManager = HibernateSessionFactoryUtil.getSessionFactory().createEntityManager();
-        EntityTransaction entityTransaction = entityManager.getTransaction();
-        entityTransaction.begin();
-        Cat updated = entityManager.merge(cat);
-        entityTransaction.commit();
-        return updated;
+        throw new CatNotFoundException();
     }
 
     /**
-     * Метод получения списка всех кошек
+     * Метод получения списка всех котов у объекта "Кот"
      *
      * @return {@link CatRepository#findAll()}
      * @see CatService
      */
-    public List<Cat> getAll() {
-        log.info("Вы вызвали метод получения всех кошек");
-//        return this.catRepository.findAll();
-        try (Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession()) {
-            return session.createQuery("From catDataTable", Cat.class).list();
-        }
+    public Collection<Cat> getAll() {
+        log.info("Вы вызвали метод получения всех котов у объекта \"Кот\"");
+        return this.catRepository.findAll();
     }
+
     /**
-     * Метод удаления кошки по айди, который присваивается Базой Данных
-     * @param cat
-     * @return возвращает объект, обернутый в {@link Optional}
+     * Метод удаления объекта "Кот" по айди, который присваивается Базой Данных
+     *
+     * @param id
+     * @return {@link CatRepository#deleteById(Object)}
      * @see CatService
      */
-    public Optional<Cat> delete(Cat cat) {
-        log.info("Вы вызвали метод удаления кошки");
-//        this.catRepository.deleteById(id);
-        Optional<Cat> optionalCat = getById(cat.getId());
-        if (optionalCat.isPresent()) {
-            try (Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession()) {
-                Transaction transaction = session.beginTransaction();
-                session.delete(optionalCat.get());
-                transaction.commit();
-                return optionalCat;
-            }
-        }
-        return Optional.empty();
+    public void deleteById(Long id) {
+        log.info("Вы вызвали метод удаления объекта \"Кот\" по id={}", id);
+        this.catRepository.deleteById(id);
     }
 }

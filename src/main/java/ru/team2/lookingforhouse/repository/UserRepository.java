@@ -4,7 +4,8 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import ru.team2.lookingforhouse.model.User;
 
-import java.util.Optional;
+
+import java.util.Set;
 /**
  * Интерфейс UserRepository.
  * @author Одокиенко Екатерина
@@ -14,7 +15,8 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends CrudRepository<User,Long> {
     /**
-     * Метод получения пользователя по чат-айди.
+     * Метод получения объекта "Пользователь" по чат-айди.
+     * @param chatId
      */
-    Optional<User> getByChatId(Long chatId);
+    Set<User> findByChatId(Long chatId);
 }
