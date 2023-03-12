@@ -16,7 +16,8 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.team2.lookingforhouse.config.BotConfig;
 import ru.team2.lookingforhouse.model.User;
-import ru.team2.lookingforhouse.model.UserRepository;
+import ru.team2.lookingforhouse.repository.UserRepository;
+
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
