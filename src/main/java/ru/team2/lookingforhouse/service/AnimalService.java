@@ -42,8 +42,8 @@ public class AnimalService {
      *
      * @param id
      * @return {@link AnimalRepository#findById(Object)}
+     * @throws AnimalNotFoundException
      * @see AnimalService
-     * @exception AnimalNotFoundException
      */
     public Animal getById(Long id) {
         log.info("Вы вызвали метод получения объекта \"Животное\" по id={}", id);
@@ -67,15 +67,13 @@ public class AnimalService {
      *
      * @param animal
      * @return {@link AnimalRepository#save(Object)}
+     * @throws AnimalNotFoundException
      * @see AnimalService
-     * @exception AnimalNotFoundException
      */
     public Animal update(Animal animal) {
         log.info("Вы вызвали метод редактирования объекта \"Животное\"");
-        if (animal.getId() != null) {
-            if (getById(animal.getId()) != null) {
-                return this.animalRepository.save(animal);
-            }
+        if (animal.getId() != null && getById(animal.getId()) != null) {
+            return this.animalRepository.save(animal);
         }
         throw new AnimalNotFoundException();
     }
