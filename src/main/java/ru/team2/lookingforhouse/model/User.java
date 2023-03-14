@@ -62,4 +62,5 @@ public class User {
 
     /** Поле "Список животных" */
     private List<Animal> animals;
+    private List<Animal> animals;
 }

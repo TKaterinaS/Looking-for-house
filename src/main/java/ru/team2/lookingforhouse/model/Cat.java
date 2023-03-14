@@ -4,16 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /** Класс "Cat" (Кошка)*/
 
 /** Аннотация @Entity определяет, что класс может быть сопоставлен таблице.
  * И это все, это просто маркер, как, например, сериализуемый интерфейс. */
-@Entity
+@Entity(name = "catTable")
 
 /** Генерирует конструктор всех аргументов.
  * Конструктор, содержащий все аргументы, требует одного аргумента для каждого поля в классе. */
@@ -47,4 +44,6 @@ public class Cat {
 
 	/** Поле "Описание" */
 	private String description;
+	@OneToOne
+	private TakenCat cat;
 }
