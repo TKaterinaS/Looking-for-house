@@ -70,9 +70,8 @@ public class TelegramBot extends TelegramLongPollingBot {
          * (все команды должны быть написаны в нижнем регистре)*/
         List<BotCommand> listOfCommands = new ArrayList<>();
         listOfCommands.add(new BotCommand("/start", "Приветствует пользователя"));
-        listOfCommands.add(new BotCommand("/info", "Выводит информацию о приюте"));
-        listOfCommands.add(new BotCommand("/to_adopt", "Выводит информацию о том, как взять питомца из приюта"));
-        listOfCommands.add(new BotCommand("/submit_report", "Выводит информацию о том, как прислать отчет о питомце"));
+        listOfCommands.add(new BotCommand("/dog", "Приют для собак"));
+        listOfCommands.add(new BotCommand("/cat", "Приют для котов"));
         listOfCommands.add(new BotCommand("/call_volunteer", "Вызвать волотера"));
         try {
             this.execute(new SetMyCommands(listOfCommands, new BotCommandScopeDefault(), null));
@@ -110,6 +109,10 @@ public class TelegramBot extends TelegramLongPollingBot {
                     sendMsgToVolunteer(chatId, userName);
                     sendMessage(chatId, "С Вами свяжется волонтер");
                     break;
+                case "/dog":
+                    startDog(chatId);
+                case "/cat":
+                    startCat(chatId);
                 /**дефолтное сообщение, если бот получит неизвестную ему команду*/
                 default:
                     sendMessage(chatId, "Нераспознанная команда, попробуйте ещё раз");
@@ -615,7 +618,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         rulesDogButton.setCallbackData(RULES_DOG_BUTTON);
 
         var docDogButton = new InlineKeyboardButton();
-        docDogButton.setText("Правила знакомства с животным до того, как можно забрать его из приюта.");
+        docDogButton.setText("Список документов");
         docDogButton.setCallbackData(DOC_DOG_BUTTON);
 
         var transportationDogButton = new InlineKeyboardButton();
