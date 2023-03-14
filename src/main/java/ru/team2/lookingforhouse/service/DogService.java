@@ -14,12 +14,16 @@ import java.util.Collection;
  * @author Одокиенко Екатерина
  */
 
-/** Платформа для регистрации сообщений в Java */
+/**
+ * Платформа для регистрации сообщений в Java
+ */
 @Log4j2
 /** Сервис для реализации бизнес-логики */
 @Service
 public class DogService {
-    /** Поле создания слоя репозитория */
+    /**
+     * Поле создания слоя репозитория
+     */
     private final DogRepository dogRepository;
 
     /**
@@ -36,8 +40,8 @@ public class DogService {
      *
      * @param id
      * @return {@link DogRepository#findById(Object)}
+     * @throws DogNotFoundException
      * @see DogService
-     * @exception  DogNotFoundException
      */
     public Dog getById(Long id) {
         log.info("Вы вызвали метод получения объекта \"Собака\" по id={}", id);
@@ -65,10 +69,8 @@ public class DogService {
      */
     public Dog update(Dog dog) {
         log.info("Вы вызвали метод редактирования объекта \"Собака\"");
-        if (dog.getId() != null) {
-            if (getById(dog.getId()) != null) {
-                return this.dogRepository.save(dog);
-            }
+        if (dog.getId() != null && getById(dog.getId()) != null) {
+            return this.dogRepository.save(dog);
         }
         throw new DogNotFoundException();
     }
@@ -88,11 +90,11 @@ public class DogService {
      * Метод удаления объекта "Собака" по айди, который присваивается Базой Данных
      *
      * @param id
-     * @return  {@link DogRepository#deleteById(Object)}
+     * @return {@link DogRepository#deleteById(Object)}
      * @see DogService
      */
     public void deleteById(Long id) {
-        log.info("Вы вызвали метод удаления объекта \"Собака\" по id={}",id);
+        log.info("Вы вызвали метод удаления объекта \"Собака\" по id={}", id);
         this.dogRepository.deleteById(id);
     }
 }

@@ -70,10 +70,8 @@ public class CatService {
      */
     public Cat update(Cat cat) {
         log.info("Вы вызвали метод редактирования объекта \"Кот\"");
-        if (cat.getId() != null) {
-            if (getById(cat.getId()) != null) {
-                return this.catRepository.save(cat);
-            }
+        if (cat.getId() != null && getById(cat.getId()) != null) {
+            return this.catRepository.save(cat);
         }
         throw new CatNotFoundException();
     }
