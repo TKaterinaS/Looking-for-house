@@ -611,47 +611,47 @@ public class TelegramBot extends TelegramLongPollingBot {
         List<List<InlineKeyboardButton>> rowsInLine = new ArrayList<>();
 
         var rulesDogButton = new InlineKeyboardButton();
-        rulesDogButton.setText("Правила знакомства с животным до того, как можно забрать его из приюта.");
+        rulesDogButton.setText("Правила знакомства с собакой.");
         rulesDogButton.setCallbackData(RULES_DOG_BUTTON);
 
         var docDogButton = new InlineKeyboardButton();
-        docDogButton.setText("Правила знакомства с животным до того, как можно забрать его из приюта.");
+        docDogButton.setText("Правила знакомства с собакой.");
         docDogButton.setCallbackData(DOC_DOG_BUTTON);
 
         var transportationDogButton = new InlineKeyboardButton();
-        transportationDogButton.setText("Рекомендации по транспортировке животного.");
+        transportationDogButton.setText("Рекомендации по транспортировке собаки.");
         transportationDogButton.setCallbackData(TRANSPORTATION_DOG_BUTTON);
 
         var recommendationsPuppyButton = new InlineKeyboardButton();
-        recommendationsPuppyButton.setText("Рекомендации по обустройству дома для щенка.");
+        recommendationsPuppyButton.setText("Как обустроить дом для щенка.");
         recommendationsPuppyButton.setCallbackData(RECOMMENDATION_PUPPY_BUTTON);
 
         var recommendationsDogButton = new InlineKeyboardButton();
-        recommendationsDogButton.setText("Рекомендации по обустройству дома для взрослой собаки.");
+        recommendationsDogButton.setText("Как обустроить дом для взрослой собаки.");
         recommendationsDogButton.setCallbackData(RECOMMENDATION_DOG_BUTTON);
 
         var recommendationsHandicappedDogButton = new InlineKeyboardButton();
-        recommendationsHandicappedDogButton.setText("Рекомендации для животного с ограниченными возможностями (зрения, передвижения).");
+        recommendationsHandicappedDogButton.setText("Собака с ограниченными возможностями.");
         recommendationsHandicappedDogButton.setCallbackData(REC_HANDICAPPED_DOG_BUTTON);
 
         var adviсesСynologistsButton = new InlineKeyboardButton();
-        adviсesСynologistsButton.setText("Советы кинолога по первичному общению с собакой.");
+        adviсesСynologistsButton.setText("Советы по первичному общению с собакой.");
         adviсesСynologistsButton.setCallbackData(ADVICES_CYNOLOGISTS_BUTTON);
 
         var cynologistsButton = new InlineKeyboardButton();
-        cynologistsButton.setText("Проверенные Ветеринарные центры для дальнейшего общения.");
+        cynologistsButton.setText("Проверенные Ветеринарные центры.");
         cynologistsButton.setCallbackData(CYNOLOGISTS_BUTTON);
 
         var reasonsForRefusalButton = new InlineKeyboardButton();
-        reasonsForRefusalButton.setText("Список причин, почему могут отказать и не дать забрать животное из приюта.");
+        reasonsForRefusalButton.setText("Список причин, почему могут отказать.");
         reasonsForRefusalButton.setCallbackData(REASONS_FOR_REFUSAL_BUTTON);
 
         var saveContactButton = new InlineKeyboardButton();
-        saveContactButton.setText("Могу принять и записать контактные данные для связи.");
+        saveContactButton.setText("Могу записать Ваши контактные данные.");
         saveContactButton.setCallbackData(SAVE_CONTACT_DOG_BUTTON);
 
         var callVolunteerButton = new InlineKeyboardButton();
-        callVolunteerButton.setText("Позвать волотнтера");
+        callVolunteerButton.setText("Позвать волонтера");
         callVolunteerButton.setCallbackData(CALL_VOLUNTEER_BUTTON);
 
         List<InlineKeyboardButton> row1 = List.of(rulesDogButton);
@@ -708,31 +708,31 @@ public class TelegramBot extends TelegramLongPollingBot {
         transportationCatButton.setCallbackData(TRANSPORTATION_CAT_BUTTON);
 
         var recommendationsKittyButton = new InlineKeyboardButton();
-        recommendationsKittyButton.setText("Рекомендации по обустройству дома для котенка.");
+        recommendationsKittyButton.setText("Как обустроить дом для котенка.");
         recommendationsKittyButton.setCallbackData(RECOMMENDATION_KITTY_BUTTON);
 
         var recommendationsCatButton = new InlineKeyboardButton();
-        recommendationsCatButton.setText("Рекомендации по обустройству дома для кошки.");
+        recommendationsCatButton.setText("Как обустроить дом для кошки.");
         recommendationsCatButton.setCallbackData(RECOMMENDATION_CAT_BUTTON);
 
         var recommendationsHandicappedCatButton = new InlineKeyboardButton();
-        recommendationsHandicappedCatButton.setText("Рекомендации для животного с ограниченными возможностями (зрения, передвижения).");
+        recommendationsHandicappedCatButton.setText("кошка с ограниченными возможностями..");
         recommendationsHandicappedCatButton.setCallbackData(REC_HANDICAPPED_CAT_BUTTON);
 
         var vetCenterButton = new InlineKeyboardButton();
-        vetCenterButton.setText("Проверенные Ветеринарные центры для дальнейшего общения.");
+        vetCenterButton.setText("Проверенные Ветеринарные центры.");
         vetCenterButton.setCallbackData(VET_CENTER_BUTTON);
 
         var reasonsForRefusalButton = new InlineKeyboardButton();
-        reasonsForRefusalButton.setText("Список причин, почему могут отказать и не дать забрать животное из приюта.");
+        reasonsForRefusalButton.setText("Список причин, почему могут отказать.");
         reasonsForRefusalButton.setCallbackData(REASONS_FOR_REFUSAL_BUTTON);
 
         var saveContactButton = new InlineKeyboardButton();
-        saveContactButton.setText("Могу принять и записать контактные данные для связи.");
+        saveContactButton.setText("Могу записать Ваши контактные данные.");
         saveContactButton.setCallbackData(SAVE_CONTACT_CAT_BUTTON);
 
         var callVolunteerButton = new InlineKeyboardButton();
-        callVolunteerButton.setText("Позвать волотнтера");
+        callVolunteerButton.setText("Позвать волонтера");
         callVolunteerButton.setCallbackData(CALL_VOLUNTEER_BUTTON);
 
         List<InlineKeyboardButton> row1 = List.of(rulesCatButton);
