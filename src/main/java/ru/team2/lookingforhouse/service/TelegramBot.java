@@ -76,7 +76,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         try {
             this.execute(new SetMyCommands(listOfCommands, new BotCommandScopeDefault(), null));
         } catch (TelegramApiException e) {
-            log.error("Error occurred: " + e.getMessage());
+            log.error("Ошибка: " + e.getMessage());
         }
     }
 
@@ -193,11 +193,11 @@ public class TelegramBot extends TelegramLongPollingBot {
                 howToAdoptDog(chatId);
 
             }
-            /**Вызов кнопок. Как взять собаку из приюта*/
+            /**Вызов кнопок. Как взять кота из приюта*/
             else if (callbackData.equals(TO_ADOPT_CAT_BUTTON)){
                 howToAdoptCat(chatId);
             }
-            /**Правила знакомства с собакой до того, как можно забрать его из приюта.*/
+            /**Правила знакомства с собакой до того, как можно забрать ее из приюта.*/
             else if (callbackData.equals(RULES_DOG_BUTTON)) {
                 String rules = "1. Перед тем как принять решение завести домашнего питомца, " +
                         "вам нужно узнать о наличии аллергии на животных у себя или у проживающих с вами родственников.\n" +
@@ -358,18 +358,17 @@ public class TelegramBot extends TelegramLongPollingBot {
                 sendMessage(chatId,advices);
                 /**Проверенные кинологи*/
             } else if (callbackData.equals(CYNOLOGISTS_BUTTON)) {
-                String cynolog = "Проверенные кинологи центры для дальнейшего общения:\n" +
-                        "";
+                String cynolog = "Проверенные кинологи для дальнейшего общения:\n" +
+                        "1.Центр кинологии и фелинологии, ветеринарная клиника, зоомагазин\"Зоосфера\".\n";
                 sendMessage(chatId, cynolog);
             }
             /**Проверенные вет.центры (для кошек)*/
             else if (callbackData.equals(VET_CENTER_BUTTON)) {
                 String veterinaryCenter = "Проверенные Ветеринарные центры для дальнейшего общения:\n" +
-                        "1.Центр кинологии и фелинологии, ветеринарная клиника, зоомагазин\"Зоосфера\".\n" +
-                        "2.Вет Клиника \"Зоолюкс\".\n" +
-                        "3.Клиника ветеринарной медицины \"Византия\".\n" +
-                        "4.Ветеринарная клиника \"Astana\".\n" +
-                        "5.Ветеринарная клиника \"Aqtaban\".";
+                        "1.Вет Клиника \"Зоолюкс\".\n" +
+                        "2.Клиника ветеринарной медицины \"Византия\".\n" +
+                        "3.Ветеринарная клиника \"Astana\".\n" +
+                        "4.Ветеринарная клиника \"Aqtaban\".";
                 sendMessage(chatId, veterinaryCenter);
             }
             /**Причины отказа*/
@@ -447,7 +446,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         submitReportButton.setCallbackData(SUBMIT_REPORT_DOG_BUTTON);
 
         var callVolunteerButton = new InlineKeyboardButton();
-        callVolunteerButton.setText("Позвать волотнтера");
+        callVolunteerButton.setText("Позвать волонтера");
         callVolunteerButton.setCallbackData("CALL_VOLUNTEER_BUTTON");
 
         List<InlineKeyboardButton> row1 = List.of(infoButton);
@@ -538,7 +537,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         safetyPrecautionsButton.setCallbackData(SAFETY_PRECAUTIONS_DOG_BUTTON);
 
         var callVolunteerButton = new InlineKeyboardButton();
-        callVolunteerButton.setText("Позвать волотнтера");
+        callVolunteerButton.setText("Позвать волонтера");
         callVolunteerButton.setCallbackData(CALL_VOLUNTEER_BUTTON);
 
         List<InlineKeyboardButton> row1 = List.of(addressDogButton);
@@ -578,11 +577,11 @@ public class TelegramBot extends TelegramLongPollingBot {
         drivingDirectionsButton.setCallbackData(DRIVING_DIRECTIONS_CAT_BUTTON);
 
         var safetyPrecautionsButton = new InlineKeyboardButton();
-        safetyPrecautionsButton.setText("ТБ на территории приюта");
+        safetyPrecautionsButton.setText("Правила поведения на территории приюта");
         safetyPrecautionsButton.setCallbackData(SAFETY_PRECAUTIONS_CAT_BUTTON);
 
         var callVolunteerButton = new InlineKeyboardButton();
-        callVolunteerButton.setText("Позвать волотнтера");
+        callVolunteerButton.setText("Позвать волонтера");
         callVolunteerButton.setCallbackData(CALL_VOLUNTEER_BUTTON);
 
         List<InlineKeyboardButton> row1 = List.of(addressDogButton);
