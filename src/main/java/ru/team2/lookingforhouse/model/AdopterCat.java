@@ -4,7 +4,7 @@ package ru.team2.lookingforhouse.model;
 import javax.persistence.*;
 
 @Entity(name = "takenCatTable")
-public class TakenCat {
+public class AdopterCat {
     @Id
     private Long id;
 

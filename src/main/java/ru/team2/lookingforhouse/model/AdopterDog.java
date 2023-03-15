@@ -5,7 +5,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 @Entity(name = "takenDogTable")
-public class TakenDog {
+public class AdopterDog {
     @Id
     private Long id;
 
