@@ -32,7 +32,6 @@ public class Cat {
 
 	/** Поле "Идентификатор", который присваивается Базой Данных */
 	private Long id;
-
 	/** Поле "Порода" животного */
 	private String breed;
 
@@ -45,5 +44,5 @@ public class Cat {
 	/** Поле "Описание" */
 	private String description;
 	@OneToOne
-	private TakenCat cat;
+	private AdopterCat cat;
 }
