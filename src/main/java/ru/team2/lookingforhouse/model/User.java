@@ -54,13 +54,13 @@ public class User {
     /** Поле "Дата регистрации" пользователя */
     private Timestamp registeredAt;
 
-//    /** Задает многозначную ассоциацию с кратностью "один ко многим". */
-//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-//
-//    /** Это задняя часть ссылки - она будет опущена при сериализации. */
-//    @JsonBackReference
+    /** Задает многозначную ассоциацию с кратностью "один ко многим". */
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+
+    /** Это задняя часть ссылки - она будет опущена при сериализации. */
+    @JsonBackReference
 
     /** Поле "Список животных" */
-//    private List<Animal> animals;
+    private List<Animal> animals;
 
 }
