@@ -18,6 +18,5 @@ import javax.persistence.Lob;
         private  String infoMessage;
         @Lob
         private byte[]  fotoId;
-
     }
 
