@@ -12,4 +12,5 @@ public class ContactUserDog {
     private String registretAt;
     private String phone;
     private String email;
+    private Long chatId;
 }

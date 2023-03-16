@@ -14,6 +14,7 @@ public class ContactUserCat {
 
     private String phone;
     private String email;
+    private Long chatId;
 
 
 }

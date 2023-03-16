@@ -16,7 +16,7 @@ import java.util.Set;
 
 public interface UserCatRepository extends JpaRepository<UserCat,Long> {
     /**
-     * Метод получения объекта "Пользователь, интересующийся котами" по чат-айди.
+     * Метод получения объекта "Пользователь, интересующийся котом" по чат-айди.
      * @param chatId
      */
     Set<UserCat> findByChatId(Long chatId);
