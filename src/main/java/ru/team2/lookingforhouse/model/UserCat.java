@@ -17,15 +17,10 @@ public class UserCat {
     @GeneratedValue
     private Long id;
 
-    private String name;
+    private String firstName;
+    private String lastName;
 
-    private int yearOfBirth;
-
-    private String phone;
-
-    private String mail;
-
-    private String address;
+    private String registretAt;
 
     private Long chatId;
 }

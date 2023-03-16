@@ -3,8 +3,6 @@ package ru.team2.lookingforhouse.service;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import ru.team2.lookingforhouse.exception.DogNotFoundException;
-import ru.team2.lookingforhouse.model.Dog;
-import ru.team2.lookingforhouse.repository.DogRepository;
 
 import java.util.Collection;
 

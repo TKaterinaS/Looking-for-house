@@ -17,15 +17,11 @@ public class UserDog {
     @GeneratedValue
     private Long id;
 
-    private String name;
+    private String firstName;
 
-    private int yearOfBirth;
+    private String lastName;
 
-    private String phone;
-
-    private String mail;
-
-    private String address;
+    private String registretAt;
 
     private Long chatId;
 }

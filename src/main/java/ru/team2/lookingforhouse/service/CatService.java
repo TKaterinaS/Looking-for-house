@@ -3,8 +3,6 @@ package ru.team2.lookingforhouse.service;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import ru.team2.lookingforhouse.exception.CatNotFoundException;
-import ru.team2.lookingforhouse.model.Cat;
-import ru.team2.lookingforhouse.repository.CatRepository;
 
 import java.util.Collection;
 

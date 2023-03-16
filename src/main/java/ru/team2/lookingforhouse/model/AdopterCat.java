@@ -8,9 +8,14 @@ public class AdopterCat {
     @Id
     private Long id;
 
-    private  String userName;
-    @OneToOne
-    private Cat cat;
+    private String firstName;
+    private String lastName;
+
+    private String registretAt;
+
+    private  String phone;
+
+    private Long chatId;
 
 
 
