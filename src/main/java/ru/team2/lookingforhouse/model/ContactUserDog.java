@@ -3,7 +3,7 @@ package ru.team2.lookingforhouse.model;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-@Entity(name = "contactUserDog")
+@Entity(name = "ContactUserDog")
 public class ContactUserDog {
     @Id
     private Long id;

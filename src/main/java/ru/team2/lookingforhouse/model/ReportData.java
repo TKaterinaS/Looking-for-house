@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Objects;
 
-    @Entity(name = "reportDataTable")
+    @Entity(name = "Report")
     public class ReportData {
         @Id
         @GeneratedValue
