@@ -56,6 +56,7 @@ public class UserService {
      *
      * @param id
      * @return {@link UserRepository#findById(Object)}
+     * @throws UserNotFoundException, если объект "Пользователь" с указанным id не был найден в БД
      * @see UserService
      */
     public User getById(Long id) {

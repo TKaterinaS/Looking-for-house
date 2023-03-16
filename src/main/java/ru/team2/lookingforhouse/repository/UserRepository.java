@@ -4,7 +4,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import ru.team2.lookingforhouse.model.User;
 
-
 import java.util.Set;
 /**
  * Интерфейс UserRepository.
