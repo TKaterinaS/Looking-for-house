@@ -12,7 +12,7 @@ import javax.persistence.Lob;
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    public class ReportData {
+    public class Report {
         @Id
         private Long chatId;
         private  String infoMessage;

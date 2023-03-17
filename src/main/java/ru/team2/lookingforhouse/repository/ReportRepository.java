@@ -2,28 +2,28 @@ package ru.team2.lookingforhouse.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import ru.team2.lookingforhouse.model.ReportData;
+import ru.team2.lookingforhouse.model.Report;
 
 import java.util.Set;
 /**
- * Интерфейс ReportDataRepository.
+ * Интерфейс ReportRepository.
  *
  * @author Одокиенко Екатерина
  */
 
 /** Механизм для хранения, извлечения, обновления, удаления и поиска объектов. */
 @Repository
-public interface ReportDataRepository extends JpaRepository<ReportData, Long> {
+public interface ReportRepository extends JpaRepository<Report, Long> {
     /**
      * Метод получения списка объектов у объекта "Отчет данных" по айди.
      * @param id
      */
-    Set<ReportData> findListByChatId(Long id);
+    Set<Report> findListByChatId(Long id);
 
     /**
      * Метод получения объекта "Отчет о данных" по айди.
      * @param id
      */
-    ReportData findByChatId(Long id);
+    Report findByChatId(Long id);
 
 }
