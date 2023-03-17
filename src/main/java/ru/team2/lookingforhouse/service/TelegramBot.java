@@ -90,7 +90,6 @@ public class TelegramBot extends TelegramLongPollingBot {
                 /**выполнение команды /call_volunteer (вызов волонтера)*/
                 case "/call_volunteer":
                     sendMsgToVolunteer(chatId, userName);
-                    sendMessage(chatId, "С Вами свяжется волонтер");
                     break;
                 /**дефолтное сообщение, если бот получит неизвестную ему команду*/
                 default:
@@ -149,7 +148,6 @@ public class TelegramBot extends TelegramLongPollingBot {
             /**Вызов волонтера*/
             else if (callbackData.equals(CALL_VOLUNTEER_BUTTON)) {
                 sendMsgToVolunteer(chatId, userName);
-                sendMessage(chatId, "С Вами свяжется волонтер");
             }
             /**Вызов кнопок, содержащих информацию по приюту для собак*/
             else if (callbackData.equals(DOG_BUTTON)) {
@@ -836,6 +834,8 @@ public class TelegramBot extends TelegramLongPollingBot {
      * @param name   второй параметр - имя пользователя, который вызывает волонтера
      */
     private void sendMsgToVolunteer(long chatId, String name) {
+//        сообщаем пользователю, что с ним сейчас свяжется волонтёр
+        sendMessage(chatId, "С Вами свяжется волонтер");
 //        генерируем рандомный чат-айди одного из волонтёров
         long randomChatId = generateRandomChatId();
 //        прописываем сообщение, которое будет отправлено волонтёру

@@ -52,7 +52,7 @@ public class ReportController {
         return this.reportService.findById(id);
     }
 
-    @Operation(summary = "Просмотр фото по id объекта \"Отчет о данных\"",
+/*    @Operation(summary = "Просмотр фото по id объекта \"Отчет о данных\"",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody (
                     description = "Фото, найденное по id объекта \"Отчет о данных\""
             )
@@ -65,7 +65,7 @@ public class ReportController {
         headers.setContentLength(report.getPhotoId().length);
 
         return ResponseEntity.status(HttpStatus.OK).headers(headers).body(report.getPhotoId());
-    }
+    }*/
 
     @Operation(summary = "Отправить сообщение пользователю",
             responses = {
