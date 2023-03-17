@@ -15,12 +15,10 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.team2.lookingforhouse.config.BotConfig;
-import ru.team2.lookingforhouse.model.User;
 import ru.team2.lookingforhouse.model.UserCat;
 import ru.team2.lookingforhouse.model.UserDog;
 import ru.team2.lookingforhouse.repository.UserCatRepository;
 import ru.team2.lookingforhouse.repository.UserDogRepository;
-import ru.team2.lookingforhouse.repository.UserRepository;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -74,16 +72,12 @@ public class TelegramBot extends TelegramLongPollingBot {
             long chatId = update.getMessage().getChatId();
 
             switch (messageText) {
-                /**Приветствие пользователя. Регистрация в БД нового пользователя*/
+                /**Приветствие пользователя.
+                 *
+                 * */
                 case "/start":
-//                    registerUser(update.getMessage());
                     startCommandReceived(chatId, userName);
                     dogOrCat(chatId);
-                    break;
-                /**выполнение команды /call_volunteer (вызов волонтера)*/
-                case "/call_volunteer":
-                    sendMsgToVolunteer(chatId, userName);
-                    sendMessage(chatId, "С Вами свяжется волонтер");
                     break;
                 case "/dog":
                     registerUserDog(update.getMessage());
@@ -93,7 +87,12 @@ public class TelegramBot extends TelegramLongPollingBot {
                     registerUserCat(update.getMessage());
                     startCat(chatId);
                     break;
-                    /**дефолтное сообщение, если бот получит неизвестную ему команду*/
+                /**выполнение команды /call_volunteer (вызов волонтера)*/
+                case "/call_volunteer":
+                    sendMsgToVolunteer(chatId, userName);
+                    sendMessage(chatId, "С Вами свяжется волонтер");
+                    break;
+                /**дефолтное сообщение, если бот получит неизвестную ему команду*/
                 default:
                     sendMessage(chatId, "Нераспознанная команда, попробуйте ещё раз");
             }
@@ -772,21 +771,12 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
-/*    private void registerUser(Message msg) {
-        if (userRepository.findById(msg.getChatId()).isEmpty()) {
-            var chatId = msg.getChatId();
-            var chat = msg.getChat();
-            User user = new User();
-            user.setId(chatId);
-            user.setFirstName(chat.getFirstName());
-            user.setLastName(chat.getLastName());
-            user.setUserName(chat.getUserName());
-            user.setRegisteredAt(new Timestamp(System.currentTimeMillis()));
-            userRepository.save(user);
-            log.info("Сохранен пользователь: " + user);
-        }
-    }*/
-
+    /**
+     * Метод, который регистрирует пользователя, заинтересовавшегося приютом для кошек.
+     * После нажатия кнопки "Кошки" в меню бота, данные пользователя автоматически сохраняются в таблице UserCat.
+     *
+     * @param msg в качестве параметра используется входящее сообщение, из которого берутся данные пользователя
+     */
     private void registerUserCat(Message msg) {
         if (userCatRepository.findById(msg.getChatId()).isEmpty()) {
             var chatId = msg.getChatId();
@@ -801,6 +791,12 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
+    /**
+     * Метод, который регистрирует пользователя, заинтересовавшегося приютом для собак.
+     * После нажатия кнопки "Собаки" в меню бота, данные пользователя автоматически сохраняются в таблице UserDog.
+     *
+     * @param msg в качестве параметра используется входящее сообщение, из которого берутся данные пользователя
+     */
     private void registerUserDog(Message msg) {
         if (userDogRepository.findById(msg.getChatId()).isEmpty()) {
             var chatId = msg.getChatId();
@@ -834,7 +830,10 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     /**
-     * метод, который вызывается при выполнении команды /call_volunteer
+     * * метод, который вызывается при выполнении команды /call_volunteer
+     *
+     * @param chatId в качестве первого параметра используется chatId пользователя
+     * @param name   второй параметр - имя пользователя, который вызывает волонтера
      */
     private void sendMsgToVolunteer(long chatId, String name) {
 //        генерируем рандомный чат-айди одного из волонтёров
