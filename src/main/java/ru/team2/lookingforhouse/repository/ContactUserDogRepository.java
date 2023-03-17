@@ -14,7 +14,7 @@ import java.util.Set;
 @Repository
 public interface ContactUserDogRepository extends JpaRepository<ContactUserDog,Long> {
     /**
-     * Метод получения объекта "Контакты пользователя, интересующийся собакой" по чат-айди.
+     * Метод получения объекта "Контакты пользователя, интересующегося собакой" по чат-айди.
      * @param chatId
      */
     Set<ContactUserDog> findByChatId(Long chatId);

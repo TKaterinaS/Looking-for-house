@@ -1,8 +1,6 @@
 package ru.team2.lookingforhouse.service;
 
 import lombok.extern.log4j.Log4j2;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.springframework.stereotype.Service;
 import ru.team2.lookingforhouse.exception.UserNotFoundException;
 import ru.team2.lookingforhouse.model.User;
@@ -47,7 +45,7 @@ public class UserService {
      * @see UserService
      */
     public Collection<User> getByChatId(Long chatId) {
-        log.info("Вы вызвали метод получения пользователя по chatId={}", chatId);
+        log.info("Вы вызвали метод получения объекта \"Пользователь\" по chatId={}", chatId);
         return this.userRepository.findByChatId(chatId);
     }
 
