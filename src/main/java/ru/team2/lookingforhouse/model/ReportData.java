@@ -17,6 +17,6 @@ import javax.persistence.Lob;
         private Long chatId;
         private  String infoMessage;
         @Lob
-        private byte[]  fotoId;
+        private byte[]  photoId;
     }
 
