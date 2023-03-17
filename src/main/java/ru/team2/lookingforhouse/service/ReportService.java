@@ -48,7 +48,7 @@ public class ReportService {
      * @throws IOException
      * @see ReportService
      */
-    public void uploadReport(Long chatId, String infoMessage, byte[] photoId) throws IOException {
+    public void uploadReport(Long chatId, String infoMessage, String photoId) throws IOException {
         log.info("Был вызван метод загрузки объекта \"Отчет данных\"");
         Report report = new Report();
         report.setInfoMessage(infoMessage);

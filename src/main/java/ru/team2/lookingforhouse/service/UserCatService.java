@@ -83,7 +83,7 @@ public class UserCatService {
      */
     public UserCat update(UserCat userCat) {
         log.info("Вы вызвали метод редактирования объекта \"Пользователь, интересующийся котом\"");
-        if (userCat.getId() != null && getById(userCat.getId()) != null) {
+        if (userCat.getChatId() != null && getById(userCat.getChatId()) != null) {
             return this.userCatRepository.save(userCat);
         }
         throw new UserCatNotFoundException();

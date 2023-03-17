@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.sql.Timestamp;
 
 @Entity(name = "AdopterDog")
 @Data
@@ -18,7 +19,7 @@ public class AdopterDog {
     private String firstName;
     private String lastName;
 
-    private String registretAt;
+    private Timestamp registeredAt;
 
     private String phone;
 

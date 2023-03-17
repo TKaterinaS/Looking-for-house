@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.sql.Timestamp;
 
 @Entity(name = "ContactUserCat")
 @Data
@@ -17,7 +18,7 @@ public class ContactUserCat {
     private String firstName;
     private String lastName;
 
-    private String registretAt;
+    private Timestamp registeredAt;
 
     private String phone;
     private String email;
