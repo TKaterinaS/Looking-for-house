@@ -83,7 +83,7 @@ public class UserDogService {
      */
     public UserDog update(UserDog userDog) {
         log.info("Вы вызвали метод редактирования объекта \"Пользователь, интересующийся собакой\"");
-        if (userDog.getId() != null && getById(userDog.getId()) != null) {
+        if (userDog.getChatId() != null && getById(userDog.getChatId()) != null) {
             return this.userDogRepository.save(userDog);
         }
         throw new UserDogNotFoundException();

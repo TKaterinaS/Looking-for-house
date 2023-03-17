@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 @Entity(name = "AdopterCat")
 @Data
@@ -18,7 +19,7 @@ public class AdopterCat {
     private String firstName;
     private String lastName;
 
-    private String registretAt;
+    private Timestamp registeredAt;
 
     private  String phone;
 

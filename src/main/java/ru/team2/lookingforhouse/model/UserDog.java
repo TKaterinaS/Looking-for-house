@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.sql.Timestamp;
 
 @Entity(name = "UserDog")
 @Data
@@ -14,14 +15,9 @@ import javax.persistence.Id;
 @AllArgsConstructor
 public class UserDog {
     @Id
-    @GeneratedValue
-    private Long id;
-
-    private String firstName;
-
-    private String lastName;
-
-    private String registretAt;
-
     private Long chatId;
+    private String firstName;
+    private String lastName;
+    private Timestamp registeredAt;
+
 }
