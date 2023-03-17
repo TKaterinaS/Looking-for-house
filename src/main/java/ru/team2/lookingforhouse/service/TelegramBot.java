@@ -792,7 +792,7 @@ private void startCommandReceived(long chatId, String name) {
         sendMessage(chatId,answer);
     }
 
-    private void sendMessage(long chatId, String textToSend) {
+    public void sendMessage(long chatId, String textToSend) {
         SendMessage message = new SendMessage(String.valueOf(chatId), textToSend);
 
         try {

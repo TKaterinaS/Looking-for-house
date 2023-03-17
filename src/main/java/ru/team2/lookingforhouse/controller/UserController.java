@@ -17,7 +17,6 @@ import ru.team2.lookingforhouse.service.UserService;
  * @author Одокиенко Екатерина
  */
 
-
 @Tag(name = "USER", description = "API для объекта \"Пользователь\"")
 @RestController
 @RequestMapping("user")
