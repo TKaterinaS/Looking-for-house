@@ -19,12 +19,14 @@ import ru.team2.lookingforhouse.model.UserCat;
 import ru.team2.lookingforhouse.model.UserDog;
 import ru.team2.lookingforhouse.repository.UserCatRepository;
 import ru.team2.lookingforhouse.repository.UserDogRepository;
+import ru.team2.lookingforhouse.util.UserStatus;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 import static ru.team2.lookingforhouse.util.Constant.*;
+import static ru.team2.lookingforhouse.util.UserStatus.*;
 
 @Slf4j
 @Component
@@ -813,6 +815,9 @@ public class TelegramBot extends TelegramLongPollingBot {
             userCat.setFirstName(chat.getFirstName());
             userCat.setLastName(chat.getLastName());
             userCat.setRegisteredAt(new Timestamp(System.currentTimeMillis()));
+//            по умолчанию каждый пользователь заносится в таблицу, как просто обычный пользователь,
+//            статус, в дальнейшем, может поменять волонтёр вручную
+            userCat.setUserStatus(JUST_USER.toString());
 //            сохраняем пользователя в таблицу
             userCatRepository.save(userCat);
             log.info("Сохранен пользователь: " + userCat);
@@ -826,17 +831,20 @@ public class TelegramBot extends TelegramLongPollingBot {
      * @param msg в качестве параметра используется входящее сообщение, из которого берутся данные пользователя
      */
     private void registerUserDog(Message msg) {
-        //        по чат-айди проверяем, что такого пользователя в таблице ещё нет
+//        по чат-айди проверяем, что такого пользователя в таблице ещё нет
         if (userDogRepository.findById(msg.getChatId()).isEmpty()) {
             var chatId = msg.getChatId();
             var chat = msg.getChat();
-            //            создаем нового пользователя и присваиваем ему данные пользователя, которого регистрируем
+//            создаем нового пользователя и присваиваем ему данные пользователя, которого регистрируем
             UserDog userDog = new UserDog();
             userDog.setChatId(chatId);
             userDog.setFirstName(chat.getFirstName());
             userDog.setLastName(chat.getLastName());
             userDog.setRegisteredAt(new Timestamp(System.currentTimeMillis()));
-            //            сохраняем пользователя в таблицу
+//            по умолчанию каждый пользователь заносится в таблицу, как просто обычный пользователь,
+//            статус, в дальнейшем, может поменять волонтёр вручную
+            userDog.setUserStatus(JUST_USER.toString());
+//            сохраняем пользователя в таблицу
             userDogRepository.save(userDog);
             log.info("Сохранен пользователь: " + userDog);
         }

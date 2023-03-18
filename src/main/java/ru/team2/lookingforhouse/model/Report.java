@@ -16,8 +16,6 @@ import javax.persistence.Lob;
 @AllArgsConstructor
 public class Report {
     @Id
-    @GeneratedValue
-    private Long id;
     private Long chatId;
     private String infoMessage;
     private String photoId;

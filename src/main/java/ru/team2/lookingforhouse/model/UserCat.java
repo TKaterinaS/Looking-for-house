@@ -16,6 +16,9 @@ public class UserCat {
     private Long chatId;
     private String firstName;
     private String lastName;
+    private String phoneNumber;
+    private String email;
     private Timestamp registeredAt;
+    private String userStatus;
 
 }
