@@ -26,20 +26,19 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("reports")
 public class ReportController {
-
     private final TelegramBot telegramBot;
     private final ReportService reportService;
-    private final String fileType = "image/jpeg";
 
     public ReportController(TelegramBot telegramBot, ReportService reportService) {
         this.telegramBot = telegramBot;
         this.reportService = reportService;
     }
-    @Operation(summary = "Просмотр объекта \"Отчет о данных\" по id",
+
+    @Operation(summary = "Просмотр объекта \"Отчет о данных\" по чат-айди",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "Объект \"Отчет о данных\", найденный по id",
+                            description = "Объект \"Отчет о данных\", найденный по чат-айди",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(implementation = Report.class)
@@ -47,25 +46,25 @@ public class ReportController {
                     )
             }
     )
-    @GetMapping("/{id}/report")
-    public Report downloadReport(@Parameter (description = "id объекта \"Отчет о данных\"") @PathVariable Long id) {
-        return this.reportService.findById(id);
+    @GetMapping("/{chatId}/report")
+    public Report downloadReport(@Parameter(description = "чат-айди объекта \"Отчет о данных\"", example = "956120008L") @PathVariable Long chatId) {
+        return this.reportService.findByChatId(chatId);
     }
 
-/*    @Operation(summary = "Просмотр фото по id объекта \"Отчет о данных\"",
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody (
-                    description = "Фото, найденное по id объекта \"Отчет о данных\""
+    @Operation(summary = "Просмотр фото по чат-айди объекта \"Отчет о данных\"",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Фото, найденное по чат-айди объекта \"Отчет о данных\""
             )
     )
-    @GetMapping("/{id}/photo_from_db")
-    public ResponseEntity<byte[]> downloadPhotoFromDB(@Parameter (description = "id объекта \"Отчет о данных\"") @PathVariable Long id) {
-        Report report = this.reportService.findById(id);
+    @GetMapping("/{chatId}/photo_from_db")
+    public ResponseEntity<String> downloadPhotoFromDB(@Parameter(description = "чат-айди объекта \"Отчет о данных\"", example = "956120008L") @PathVariable Long chatId) {
+        Report report = this.reportService.findByChatId(chatId);
         HttpHeaders headers = new HttpHeaders();
+        final String fileType = "image/jpeg";
         headers.setContentType(MediaType.parseMediaType(fileType));
-        headers.setContentLength(report.getPhotoId().length);
-
+        headers.setContentLength(report.getPhotoId().length());
         return ResponseEntity.status(HttpStatus.OK).headers(headers).body(report.getPhotoId());
-    }*/
+    }
 
     @Operation(summary = "Отправить сообщение пользователю",
             responses = {
@@ -80,10 +79,10 @@ public class ReportController {
             }
     )
     @GetMapping("/message_to_person")
-    public void sendMessageToPerson(@Parameter(description = "чат id пользователя", example = "956120008L")
-                                    @RequestParam Long chat_Id,
-                                    @Parameter(description = "Ваше сообщение")
+    public void sendMessageToPerson(@Parameter(description = "чат-айди пользователя", example = "956120008L")
+                                    @RequestParam Long chatId,
+                                    @Parameter(description = "Ваше сообщение",  example = "Приветствую вас, пурпурный человек!")
                                     @RequestParam String message) {
-        this.telegramBot.sendMessage(chat_Id, message);
+        this.telegramBot.sendMessage(chatId, message);
     }
 }
