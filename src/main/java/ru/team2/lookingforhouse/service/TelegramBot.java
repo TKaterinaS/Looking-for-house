@@ -19,11 +19,12 @@ import ru.team2.lookingforhouse.model.UserCat;
 import ru.team2.lookingforhouse.model.UserDog;
 import ru.team2.lookingforhouse.repository.UserCatRepository;
 import ru.team2.lookingforhouse.repository.UserDogRepository;
-import ru.team2.lookingforhouse.util.UserStatus;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static ru.team2.lookingforhouse.util.Constant.*;
 import static ru.team2.lookingforhouse.util.UserStatus.*;
@@ -403,7 +404,24 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case SAVE_CONTACT_CAT_BUTTON:
                     //написать метод, который дубет сохранять в бд юзеров собак
                     break;
+                case SUBMIT_REPORT_BUTTON:
+                    String infoAboutReport = """
+                            Для отчета нужна следующая информация:
+                            - Фото животного.  
+                            - Рацион животного
+                            - Общее самочувствие и привыкание к новому месту
+                            - Изменение в поведении: отказ от старых привычек, приобретение новых.
+                            Скопируйте следующий пример. Не забудьте прикрепить фото
+                            """;
+                    String reportExample = """
+                            Рацион: ваш текст;
+                            Самочувствие: ваш текст;
+                            Поведение: ваш текст;""";
+                    sendMessage(chatId, infoAboutReport);
+                    sendMessage(chatId, reportExample);
+                    break;
             }
+
         }
     }
 
@@ -466,11 +484,11 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         var submitReportButton = new InlineKeyboardButton();
         submitReportButton.setText("Прислать отчет о питомце");
-        submitReportButton.setCallbackData(SUBMIT_REPORT_DOG_BUTTON);
+        submitReportButton.setCallbackData(SUBMIT_REPORT_BUTTON);
 
         var callVolunteerButton = new InlineKeyboardButton();
         callVolunteerButton.setText("Позвать волонтера");
-        callVolunteerButton.setCallbackData("CALL_VOLUNTEER_BUTTON");
+        callVolunteerButton.setCallbackData(CALL_VOLUNTEER_BUTTON);
 
         List<InlineKeyboardButton> row1 = List.of(infoButton);
         List<InlineKeyboardButton> row2 = List.of(toAdoptButton);
@@ -518,7 +536,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         var submitReportButton = new InlineKeyboardButton();
         submitReportButton.setText("Прислать отчет о питомце");
-        submitReportButton.setCallbackData(SUBMIT_REPORT_CAT_BUTTON);
+        submitReportButton.setCallbackData(SUBMIT_REPORT_BUTTON);
 
         var callVolunteerButton = new InlineKeyboardButton();
         callVolunteerButton.setText("Позвать волонтера");
@@ -895,5 +913,14 @@ public class TelegramBot extends TelegramLongPollingBot {
         return chatIdList.get(randValue);
     }
 
+    public void getReport(Update update) {
+        Pattern pattern = Pattern.compile(REGEX_MESSAGE);
+        Matcher matcher = pattern.matcher(update.getMessage().getCaption());
+        if (matcher.matches()) {
+            String ration = matcher.group(3);
+            String health = matcher.group(7);
+            String habits = matcher.group(11);
+        }
+    }
 }
 

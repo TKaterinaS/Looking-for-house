@@ -15,8 +15,7 @@ public class Constant {
    public final static String INFO_CAT_BUTTON = "INFO_CAT_BUTTON";
    public final static String TO_ADOPT_DOG_BUTTON = "TO_ADOPT_DOG_BUTTON";
    public final static String TO_ADOPT_CAT_BUTTON = "TO_ADOPT_CAT_BUTTON";
-   public final static String SUBMIT_REPORT_DOG_BUTTON = "SUBMIT_REPORT_DOG_BUTTON";
-   public final static String SUBMIT_REPORT_CAT_BUTTON = "SUBMIT_REPORT_CAT_BUTTON";
+   public final static String SUBMIT_REPORT_BUTTON = "SUBMIT_REPORT_BUTTON";
    public final static String RULES_DOG_BUTTON = "RULES_DOG_BUTTON";
    public final static String RULES_CAT_BUTTON = "RULES_CAT_BUTTON";
    public final static String DOC_DOG_BUTTON = "DOC_DOG_BUTTON";
@@ -35,4 +34,8 @@ public class Constant {
    public final static String REASONS_FOR_REFUSAL_BUTTON = "REASONS_FOR_REFUSAL_BUTTON";
    public final static String SAVE_CONTACT_DOG_BUTTON = "SAVE_CONTACT_DOG_BUTTON";
    public final static String SAVE_CONTACT_CAT_BUTTON = "SAVE_CONTACT_CAT_BUTTON";
+
+   public static final String REGEX_MESSAGE = "(Рацион:)(\\s)(\\W+)(;)\n" +
+           "(Самочувствие:)(\\s)(\\W+)(;)\n" +
+           "(Поведение:)(\\s)(\\W+)(;)";
 }
