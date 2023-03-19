@@ -27,7 +27,7 @@ public class UserCatService {
     private final UserCatRepository userCatRepository;
 
     /**
-     * Конструктор - создание нового объекта.
+     * Конструктор - создание нового объекта
      *
      * @see UserCatService#UserCatService(UserCatRepository userCatRepository)
      */

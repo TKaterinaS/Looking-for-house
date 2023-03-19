@@ -15,7 +15,7 @@ import java.util.Set;
 @Repository
 public interface ReportRepository extends JpaRepository<Report, Long> {
     /**
-     * Метод получения списка объектов у объекта "Отчет данных" по чат-айди.
+     * Метод получения списка у объекта "Отчет данных" по чат-айди.
      * @param chatId
      */
     Set<Report> findListByChatId(Long chatId);

@@ -51,27 +51,16 @@ public class ReportService {
     public void uploadReport(Long chatId, String infoMessage, String photoId) throws IOException {
         log.info("Был вызван метод загрузки объекта \"Отчет данных\"");
         Report report = new Report();
-        report.setInfoMessage(infoMessage);
         report.setChatId(chatId);
+        report.setInfoMessage(infoMessage);
         report.setPhotoId(photoId);
         this.reportRepository.save(report);
     }
 
-    /**
-     * Метод получения объекта "Отчет данных" по айди.
-     *
-     * @param id
-     * @return {@link ReportRepository#findById(Object)}
-     * @throws ReportNotFoundException, если объект "Отчет данных" с указанным id не был найден в БД
-     * @see ReportService
-     */
-    public Report findById(Long id) {
-        log.info("Был вызван метод получения объекта \"Отчет данных\" по id={}", id);
-        return this.reportRepository.findById(id).orElseThrow(ReportNotFoundException::new);
-    }
 
     /**
      * Метод получения объекта "Отчет данных" по чат-айди.
+     *
      * @param chatId
      * @return {@link ReportRepository#findByChatId(Long)}
      * @see ReportService
@@ -83,6 +72,7 @@ public class ReportService {
 
     /**
      * Метод получения списка у объекта "Отчет данных" по чат-айди.
+     *
      * @param chatId
      * @return {@link ReportRepository#findListByChatId(Long)}
      * @see ReportService
@@ -94,6 +84,7 @@ public class ReportService {
 
     /**
      * Метод сохранения объекта "Отчет данных".
+     *
      * @param report
      * @return {@link ReportRepository#findListByChatId(Long)}
      * @see ReportService
@@ -105,6 +96,7 @@ public class ReportService {
 
     /**
      * Метод удаления объекта "Отчет данных" по айди.
+     *
      * @param id
      * @return {@link ReportRepository#deleteById(Object)}
      * @see ReportService
@@ -115,7 +107,7 @@ public class ReportService {
     }
 
     /**
-     * Метод получение списка всех объектов "Отчет данных".
+     * Метод получение всех объектов "Отчет данных".
      *
      * @return {@link ReportRepository#findAll()}
      * @see ReportService
@@ -125,8 +117,10 @@ public class ReportService {
         return this.reportRepository.findAll();
     }
 
+//Возможно и не понадобится этот метод...
     /**
-     * Метод получение списка всех объектов "Отчет данных" с параметрами: номер страницы и количество страниц.
+     * Метод получения списка всех объектов "Отчет данных" с параметрами: номер страницы и количество страниц.
+     *
      * @param pageNumber
      * @param pageSize
      * @return {@link ReportRepository#findAll()}
@@ -138,13 +132,15 @@ public class ReportService {
         return this.reportRepository.findAll(pageRequest).getContent();
     }
 
+//Возможно и не понадобится этот метод...
     /**
      * Метод получения расширения файла.
+     *
      * @param fileName
      * @see ReportService
      */
     private String getExtensions(String fileName) {
-        log.info("Былвызван метод получения расширения файла");
+        log.info("Был вызван метод получения расширения файла");
         return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
 }
