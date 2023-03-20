@@ -3,12 +3,10 @@ package ru.team2.lookingforhouse.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.team2.lookingforhouse.util.StatusAttributeConverter;
 import ru.team2.lookingforhouse.util.UserStatus;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity(name = "UserCat")
@@ -24,7 +22,7 @@ public class UserCat {
     private String email;
     private Timestamp registeredAt;
 
-    @Enumerated(EnumType.STRING)
+@Convert(converter = StatusAttributeConverter.class)
     private UserStatus userStatus;
 
 }
