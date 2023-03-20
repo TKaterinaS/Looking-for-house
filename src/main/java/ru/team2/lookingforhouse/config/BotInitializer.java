@@ -14,11 +14,16 @@ import ru.team2.lookingforhouse.service.TelegramBot;
 @Component
 public class BotInitializer {
 
+    private final TelegramBot bot;
+
     @Autowired
-    TelegramBot bot;
+    public BotInitializer(TelegramBot bot) {
+        this.bot = bot;
+    }
+
     @EventListener({ContextRefreshedEvent.class})
     public void init() throws TelegramApiException {
-        TelegramBotsApi telegramBotsApi=new TelegramBotsApi(DefaultBotSession.class);
+        TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
         try {
             telegramBotsApi.registerBot(bot);
         } catch (TelegramApiException e) {

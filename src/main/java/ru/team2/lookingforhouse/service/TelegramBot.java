@@ -19,7 +19,6 @@ import ru.team2.lookingforhouse.model.UserCat;
 import ru.team2.lookingforhouse.model.UserDog;
 import ru.team2.lookingforhouse.repository.UserCatRepository;
 import ru.team2.lookingforhouse.repository.UserDogRepository;
-import ru.team2.lookingforhouse.util.UserStatus;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -32,15 +31,14 @@ import static ru.team2.lookingforhouse.util.UserStatus.*;
 @Component
 public class TelegramBot extends TelegramLongPollingBot {
 
-
-    @Autowired
-    private UserCatRepository userCatRepository;
-    @Autowired
-    private UserDogRepository userDogRepository;
+    private final UserCatRepository userCatRepository;
+    private final UserDogRepository userDogRepository;
     final BotConfig config;
 
-
-    public TelegramBot(BotConfig config) {
+    @Autowired
+    public TelegramBot(BotConfig config, UserCatRepository userCatRepository, UserDogRepository userDogRepository) {
+        this.userCatRepository = userCatRepository;
+        this.userDogRepository = userDogRepository;
         this.config = config;
 //         Создание кнопки меню (все команды должны быть написаны в нижнем регистре)
         List<BotCommand> listOfCommands = new ArrayList<>();
