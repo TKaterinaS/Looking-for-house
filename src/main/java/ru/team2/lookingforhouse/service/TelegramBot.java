@@ -75,27 +75,25 @@ public class TelegramBot extends TelegramLongPollingBot {
             switch (messageText) {
 //                При выполнении команды старт Бот приветствует пользователя и предлагает ему выбрать,
 //                какой приют его интересует.
-                case "/start":
+                case "/start" -> {
                     startCommandReceived(chatId, userName);
                     dogOrCat(chatId);
-                    break;
+                }
 //                    если выбрали приют собак, происходит регистрация пользователя и запись его данных в таблицу UserDog
-                case "/dog":
+                case "/dog" -> {
                     registerUserDog(update.getMessage());
                     startDog(chatId);
-                    break;
+                }
 //                    если выбрали приют кошек, происходит регистрация пользователя и запись его данных в таблицу UserCat
-                case "/cat":
+                case "/cat" -> {
                     registerUserCat(update.getMessage());
                     startCat(chatId);
-                    break;
+                }
 //                выполнение команды /call_volunteer (вызов волонтера)
-                case "/call_volunteer":
-                    sendMsgToVolunteer(chatId, userName);
-                    break;
+                case "/call_volunteer" -> sendMsgToVolunteer(chatId, userName);
+
 //                дефолтное сообщение, если бот получит неизвестную ему команду
-                default:
-                    sendMessage(chatId, "Нераспознанная команда, попробуйте ещё раз");
+                default -> sendMessage(chatId, "Нераспознанная команда, попробуйте ещё раз");
             }
         }
 //        Обработка запросов из кнопок бота
@@ -817,7 +815,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             userCat.setRegisteredAt(new Timestamp(System.currentTimeMillis()));
 //            по умолчанию каждый пользователь заносится в таблицу, как просто обычный пользователь,
 //            статус, в дальнейшем, может поменять волонтёр вручную
-            userCat.setUserStatus(JUST_USER.toString());
+            userCat.setUserStatus(JUST_USER);
 //            сохраняем пользователя в таблицу
             userCatRepository.save(userCat);
             log.info("Сохранен пользователь: " + userCat);
@@ -843,7 +841,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             userDog.setRegisteredAt(new Timestamp(System.currentTimeMillis()));
 //            по умолчанию каждый пользователь заносится в таблицу, как просто обычный пользователь,
 //            статус, в дальнейшем, может поменять волонтёр вручную
-            userDog.setUserStatus(JUST_USER.toString());
+            userDog.setUserStatus(JUST_USER);
 //            сохраняем пользователя в таблицу
             userDogRepository.save(userDog);
             log.info("Сохранен пользователь: " + userDog);
