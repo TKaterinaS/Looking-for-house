@@ -3,8 +3,10 @@ package ru.team2.lookingforhouse.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import ru.team2.lookingforhouse.util.StatusAttributeConverter;
+import ru.team2.lookingforhouse.util.UserStatus;
+
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity(name = "UserDog")
@@ -19,6 +21,8 @@ public class UserDog {
     private String phoneNumber;
     private String email;
     private Timestamp registeredAt;
-    private String userStatus;
+
+    @Convert(converter = StatusAttributeConverter.class)
+    private UserStatus userStatus;
 
 }
