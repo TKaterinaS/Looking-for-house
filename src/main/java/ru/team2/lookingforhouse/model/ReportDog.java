@@ -18,5 +18,5 @@ public class ReportDog {
     private String infoMessage;
     private String photoId;
     @ManyToOne
-    private UserCat userDog;
+    private UserDog userDog;
 }
