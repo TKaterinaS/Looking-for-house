@@ -21,9 +21,9 @@ import ru.team2.lookingforhouse.service.TelegramBot;
  * @author Одокиенко Екатерина
  */
 
-@Tag(name = "REPORT-CAT", description = "API для объекта \"Отчет данных пользователя, интересующегося котом\"")
+@Tag(name = "REPORT CAT", description = "API для объекта \"Отчет данных пользователя, интересующегося котом\"")
 @RestController
-@RequestMapping("reports")
+@RequestMapping("report_cat")
 public class ReportCatController {
     private final TelegramBot telegramBot;
     private final ReportCatService reportCatService;
@@ -43,16 +43,18 @@ public class ReportCatController {
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(implementation = ReportCat.class)
                             )
-                    )
+                    ),
+                    @ApiResponse(responseCode = "400",
+                            description = "Объект \"Отчет о данных пользователя, интересующегося котом\" по данному id не найден!")
             }
     )
-    @GetMapping("/{id}/report")
+    @GetMapping("/{id}")
     public ReportCat downloadReport(@Parameter(description = "айди объекта \"Отчет о данных пользователя, интересующегося котом\"", example = "956120008L")
                                         @PathVariable Long id) {
         return this.reportCatService.findById(id);
     }
 
-    @Operation(summary = "Просмотр фото по чат-айди объекта \"Отчет о данных пользователя, интересующегося котом\"",
+    @Operation(summary = "Просмотр фото по айди объекта \"Отчет о данных пользователя, интересующегося котом\"",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "Фото, найденное по айди объекта \"Отчет о данных пользователя, интересующегося котом\""
             )
