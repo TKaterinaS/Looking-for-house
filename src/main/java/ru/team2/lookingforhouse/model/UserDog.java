@@ -21,7 +21,6 @@ public class UserDog {
     private String firstName;
     private String lastName;
     private String phoneNumber;
-    private String email;
     private LocalDateTime registeredAt;
 
     @Convert(converter = StatusAttributeConverter.class)
