@@ -6,16 +6,17 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
-
-@Entity(name = "Report")
+@Entity(name = "ReportCat")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Report {
+public class ReportCat {
     @Id
-    private Long chatId;
+    private long id;
     private String infoMessage;
     private String photoId;
+    @ManyToOne
+    private UserCat userCat;
 }
-
