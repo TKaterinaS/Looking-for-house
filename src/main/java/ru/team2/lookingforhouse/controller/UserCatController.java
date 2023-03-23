@@ -41,10 +41,10 @@ public class UserCatController {
                             description = "Объект \"Пользователь, интересующийся котом\" по данному id не найден!")
             }
     )
-    @GetMapping("/{id}")
-    public UserCat getById(@Parameter(description = "id объекта \"Пользователь, интересующийся котом\"", example = "956120008L")
-                           @PathVariable Long id) {
-        return userCatService.getById(id);
+    @GetMapping("/{chatId}")
+    public UserCat getByChatId(@Parameter(description = "id объекта \"Пользователь, интересующийся котом\"", example = "956120008L")
+                           @PathVariable Long chatId) {
+        return (UserCat) userCatService.findByChatId(chatId);
     }
 
     @Operation(summary = "Создание объекта \"Пользователь, интересующийся котом\"",

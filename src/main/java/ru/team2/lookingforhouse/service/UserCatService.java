@@ -1,6 +1,7 @@
 package ru.team2.lookingforhouse.service;
 
 import lombok.extern.log4j.Log4j2;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import ru.team2.lookingforhouse.exception.UserCatNotFoundException;
 import ru.team2.lookingforhouse.model.UserCat;
@@ -19,6 +20,7 @@ import java.util.Collection;
 @Log4j2
 /** Сервис для реализации бизнес-логики */
 @Service
+
 public class UserCatService {
 
     /**
@@ -43,22 +45,9 @@ public class UserCatService {
      * @return {@link UserCatRepository#findByChatId(Long)}
      * @see UserCatService
      */
-    public Collection<UserCat> getByChatId(Long chatId) {
+    public Collection<UserCat> findByChatId(Long chatId) {
         log.info("Вы вызвали метод получения объекта \"Пользователь, интересующийся котом\" по chatId={}", chatId);
         return this.userCatRepository.findByChatId(chatId);
-    }
-
-    /**
-     * Метод получения объекта "Пользователь, интересующийся котом" по айди, который присваивается Базой Данных
-     *
-     * @param id
-     * @return {@link UserCatRepository#findById(Object)}
-     * @throws UserCatNotFoundException, если объект "Пользователь, интересующийся котом" с указанным id не был найден в БД
-     * @see UserCatService
-     */
-    public UserCat getById(Long id) {
-        log.info("Вы вызвали метод получения объекта \"Пользователь, интересующийся котом\" по id={}", id);
-        return this.userCatRepository.findById(id).orElseThrow(UserCatNotFoundException::new);
     }
 
     /**
@@ -83,7 +72,7 @@ public class UserCatService {
      */
     public UserCat update(UserCat userCat) {
         log.info("Вы вызвали метод редактирования объекта \"Пользователь, интересующийся котом\"");
-        if (userCat.getChatId() != null && getById(userCat.getChatId()) != null) {
+        if (userCat.getChatId() != null && findByChatId(userCat.getChatId()) != null) {
             return this.userCatRepository.save(userCat);
         }
         throw new UserCatNotFoundException();

@@ -43,22 +43,9 @@ public class UserDogService {
      * @return {@link UserDogRepository#findByChatId(Long)}
      * @see UserDogService
      */
-    public Collection<UserDog> getByChatId(Long chatId) {
+    public Collection<UserDog> findByChatId(Long chatId) {
         log.info("Вы вызвали метод получения объекта \"Пользователь, интересующийся собакой\" по chatId={}", chatId);
         return this.userDogRepository.findByChatId(chatId);
-    }
-
-    /**
-     * Метод получения объекта "Пользователь, интересующийся собакой" по айди, который присваивается Базой Данных
-     *
-     * @param id
-     * @return {@link UserDogRepository#findById(Object)}
-     * @throws UserDogNotFoundException, если объект "Пользователь, интересующийся собакой" с указанным id не был найден в БД
-     * @see UserDogService
-     */
-    public UserDog getById(Long id) {
-        log.info("Вы вызвали метод получения объекта \"Пользователь, интересующийся собакой\" по id={}", id);
-        return this.userDogRepository.findById(id).orElseThrow(UserDogNotFoundException::new);
     }
 
     /**
@@ -83,7 +70,7 @@ public class UserDogService {
      */
     public UserDog update(UserDog userDog) {
         log.info("Вы вызвали метод редактирования объекта \"Пользователь, интересующийся собакой\"");
-        if (userDog.getChatId() != null && getById(userDog.getChatId()) != null) {
+        if (userDog.getChatId() != null && findByChatId(userDog.getChatId()) != null) {
             return this.userDogRepository.save(userDog);
         }
         throw new UserDogNotFoundException();

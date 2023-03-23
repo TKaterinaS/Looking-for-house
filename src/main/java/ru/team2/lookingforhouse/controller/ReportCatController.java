@@ -34,34 +34,74 @@ public class ReportCatController {
         this.reportCatService = reportCatService;
     }
 
-    @Operation(summary = "Просмотр объекта \"Отчет о данных пользователя, интересующегося котом\" по айди",
+    @Operation(summary = "Просмотр объекта \"Отчет данных пользователя, интересующегося котом\" по айди",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "Объект \"Отчет о данных пользователя, интересующегося котом\", найденный по айди",
+                            description = "Объект \"Отчет данных пользователя, интересующегося котом\", найденный по айди",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(implementation = ReportCat.class)
                             )
                     ),
                     @ApiResponse(responseCode = "400",
-                            description = "Объект \"Отчет о данных пользователя, интересующегося котом\" по данному id не найден!")
+                            description = "Объект \"Отчет данных пользователя, интересующегося котом\" по данному id не найден!")
             }
     )
     @GetMapping("/{id}")
-    public ReportCat downloadReport(@Parameter(description = "айди объекта \"Отчет о данных пользователя, интересующегося котом\"", example = "956120008L")
-                                        @PathVariable Long id) {
+    public ReportCat downloadReport(@Parameter(description = "айди объекта \"Отчет данных пользователя, интересующегося котом\"", example = "956120008L")
+                                    @PathVariable Long id) {
         return this.reportCatService.findById(id);
     }
 
-    @Operation(summary = "Просмотр фото по айди объекта \"Отчет о данных пользователя, интересующегося котом\"",
+    @Operation(summary = "Просмотр объекта \"Отчет данных пользователя, интересующегося котом\" по чат-айди",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Объект \"Отчет данных пользователя, интересующегося котом\", найденный по чат-айди",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ReportCat.class)
+                            )
+                    ),
+                    @ApiResponse(responseCode = "400",
+                            description = "Объект \"Отчет данных пользователя, интересующегося котом\" по данному чат-айди не найден!")
+            }
+    )
+    @GetMapping("/{chatId}")
+    public ReportCat downloadReportByChatId(@Parameter(description = "чат-айди объекта \"Отчет данных пользователя, интересующегося котом\"", example = "956120008L")
+                                            @PathVariable Long chatId) {
+        return this.reportCatService.findByUserCat_ChatId(chatId);
+    }
+
+    @Operation(summary = "Просмотр списка объектов \"Отчет данных пользователя, интересующегося котом\" по чат-айди",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Список объектов \"Отчет данных пользователя, интересующегося котом\", найденный по чат-айди",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ReportCat.class)
+                            )
+                    ),
+                    @ApiResponse(responseCode = "400",
+                            description = "Список объектов \"Отчет данных пользователя, интересующегося котом\" по данному чат-айди не найден!")
+            }
+    )
+    @GetMapping("/{all_reports_by_chatId}")
+    public ReportCat downloadAllReportByChatId(@Parameter(description = "чат-айди объекта \"Отчет данных пользователя, интересующегося котом\"", example = "956120008L")
+                                               @PathVariable Long chatId) {
+        return (ReportCat) this.reportCatService.findAllByUserCat_ChatId(chatId);
+    }
+
+    @Operation(summary = "Просмотр фото по айди объекта \"Отчет данных пользователя, интересующегося котом\"",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "Фото, найденное по айди объекта \"Отчет о данных пользователя, интересующегося котом\""
+                    description = "Фото, найденное по айди объекта \"Отчет данных пользователя, интересующегося котом\""
             )
     )
     @GetMapping("/{id}/photo_from_db")
-    public ResponseEntity<String> downloadPhotoFromDB(@Parameter(description = "айди объекта \"Отчет о данных пользователя, интересующегося котом\"", example = "956120008L")
-                                                          @PathVariable Long id) {
+    public ResponseEntity<String> downloadPhotoFromDB(@Parameter(description = "айди объекта \"Отчет данных пользователя, интересующегося котом\"", example = "956120008L")
+                                                      @PathVariable Long id) {
         ReportCat report = this.reportCatService.findById(id);
         HttpHeaders headers = new HttpHeaders();
         final String fileType = "image/jpeg";

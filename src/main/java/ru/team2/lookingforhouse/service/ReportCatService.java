@@ -1,7 +1,6 @@
 package ru.team2.lookingforhouse.service;
 
 import lombok.extern.log4j.Log4j2;
-import org.springframework.data.domain.Example;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.team2.lookingforhouse.exception.ReportNotFoundException;
@@ -12,7 +11,6 @@ import ru.team2.lookingforhouse.repository.ReportCatRepository;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
-import java.util.function.Function;
 /**
  * Класс сервиса объекта "Отчет данных пользователя, интересующегося котом"
  *
@@ -33,7 +31,6 @@ public class ReportCatService {
 
     public ReportCatService(ReportCatRepository reportCatRepository) {
         this.reportCatRepository = reportCatRepository;
-
     }
 
     /**
@@ -74,6 +71,18 @@ public class ReportCatService {
     }
 
     /**
+     * Метод получения объекта "Отчет данных пользователя, интересующегося котом" по чат-айди.
+     *
+     * @param chatId
+     * @return {@link ReportCatRepository#findByUserCat_ChatId(Long)}
+     * @see ReportCatService
+     */
+    public ReportCat findByUserCat_ChatId(Long chatId) {
+        log.info("Был вызван метод получения объекта \"Отчет данных пользователя, интересующегося котом\" по chatId={}", chatId);
+        return (ReportCat) this.reportCatRepository.findByUserCat_ChatId(chatId);
+    }
+
+    /**
      * Метод сохранения объекта "Отчет данных пользователя, интересующегося котом".
      *
      * @param reportCat
@@ -97,14 +106,14 @@ public class ReportCatService {
     }
 
     /**
-     * Метод получение всех объектов "Отчет данных пользователя, интересующегося котом".
+     * Метод получения списка всех объектов "Отчет данных пользователя, интересующегося котом" по чат-айди.
      *
-     * @return {@link ReportCatRepository#findAll()}
+     * @return {@link ReportCatRepository#findAllByUserCat_ChatId(Long)} ()}
      * @see ReportCatService
      */
-    public List<ReportCat> getAll() {
-        log.info("Был вызван метод получения списка всех объектов \"Отчет данных пользователя, интересующегося котом\"");
-        return this.reportCatRepository.findAll();
+    public Collection<ReportCat> findAllByUserCat_ChatId(Long chatId) {
+        log.info("Был вызван метод  получения списка всех объектов \"Отчет данных пользователя, интересующегося котом\" по chatId={}", chatId);
+        return this.reportCatRepository.findAllByUserCat_ChatId(chatId);
     }
 
 //Возможно и не понадобится этот метод...

@@ -57,6 +57,7 @@ public class ReportDogService {
         report.setUserDog(userDog);
         this.reportDogRepository.save(report);
     }
+
     /**
      * Метод получения объекта "Отчет данных пользователя, интересующегося собакой" по айди.
      *
@@ -70,6 +71,17 @@ public class ReportDogService {
         return this.reportDogRepository.findById(id).orElseThrow(ReportNotFoundException::new);
     }
 
+    /**
+     * Метод получения объекта "Отчет данных пользователя, интересующегося собакой" по чат-айди.
+     *
+     * @param chatId
+     * @return {@link ReportDogRepository#findByUserDog_ChatId(Long)}
+     * @see ReportDogService
+     */
+    public ReportDog findByUserDog_ChatId(Long chatId) {
+        log.info("Был вызван метод получения объекта \"Отчет данных пользователя, интересующегося собакой\" по chatId={}", chatId);
+        return (ReportDog) this.reportDogRepository.findByUserDog_ChatId(chatId);
+    }
 
     /**
      * Метод сохранения объекта "Отчет данных пользователя, интересующегося собакой".
@@ -95,24 +107,25 @@ public class ReportDogService {
     }
 
     /**
-     * Метод получение всех объектов "Отчет данных пользователя, интересующегося собакой".
+     * Метод получения списка всех объектов "Отчет данных пользователя, интересующегося собакой" по чат-айди.
      *
-     * @return {@link ReportDogRepository#findAll()}
+     * @return {@link ReportDogRepository#findAllByUserDog_ChatId(Long)} ()}
      * @see ReportDogService
      */
-    public List<ReportDog> getAll() {
-        log.info("Был вызван метод получения списка всех объектов \"Отчет данных пользователя, интересующегося собакой\"");
-        return this.reportDogRepository.findAll();
+    public Collection<ReportDog> findAllByUserDog_ChatId(Long chatId) {
+        log.info("Был вызван метод  получения списка всех объектов \"Отчет данных пользователя, интересующегося собакой\" по chatId={}", chatId);
+        return this.reportDogRepository.findAllByUserDog_ChatId(chatId);
     }
 
 //Возможно и не понадобится этот метод...
+
     /**
      * Метод получения списка всех объектов "Отчет данных пользователя, интересующегося собакой" с параметрами: номер страницы и количество страниц.
      *
      * @param pageNumber
      * @param pageSize
      * @return {@link ReportDogRepository#findAll()}
-     * @see ReportCatService
+     * @see ReportDogService
      */
     public List<ReportDog> getAllReports(Integer pageNumber, Integer pageSize) {
         log.info("Был вызван метод получения списка всех объектов \"Отчет данных пользователя, интересующегося собакой\" с параметрами");
@@ -121,6 +134,7 @@ public class ReportDogService {
     }
 
 //Возможно и не понадобится этот метод...
+
     /**
      * Метод получения расширения файла.
      *

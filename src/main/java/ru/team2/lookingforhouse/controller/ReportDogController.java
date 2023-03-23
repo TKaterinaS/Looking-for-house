@@ -11,9 +11,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.team2.lookingforhouse.model.ReportCat;
 import ru.team2.lookingforhouse.model.ReportDog;
 import ru.team2.lookingforhouse.service.ReportDogService;
 import ru.team2.lookingforhouse.service.TelegramBot;
+
 /**
  * Класс контроллера объекта "Отчет данных пользователя, интересующегося собакой"
  *
@@ -31,33 +33,74 @@ public class ReportDogController {
         this.telegramBot = telegramBot;
         this.reportDogService = reportDogService;
     }
-    @Operation(summary = "Просмотр объекта \"Отчет о данных пользователя, интересующегося собакой\" по айди",
+
+    @Operation(summary = "Просмотр объекта \"Отчет данных пользователя, интересующегося собакой\" по айди",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "Объект \"Отчет о данных пользователя, интересующегося собакой\", найденный по айди",
+                            description = "Объект \"Отчет данных пользователя, интересующегося собакой\", найденный по айди",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(implementation = ReportDog.class)
                             )
                     ),
                     @ApiResponse(responseCode = "400",
-                            description = "Объект \"Отчет о данных пользователя, интересующегося собакой\" по данному id не найден!")
+                            description = "Объект \"Отчет данных пользователя, интересующегося собакой\" по данному id не найден!")
             }
     )
     @GetMapping("/{id}")
-    public ReportDog downloadReport(@Parameter(description = "айди объекта \"Отчет о данных пользователя, интересующегося собакой\"", example = "956120008L")
+    public ReportDog downloadReport(@Parameter(description = "айди объекта \"Отчет данных пользователя, интересующегося собакой\"", example = "956120008L")
                                     @PathVariable Long id) {
         return this.reportDogService.findById(id);
     }
 
-    @Operation(summary = "Просмотр фото по айди объекта \"Отчет о данных пользователя, интересующегося собакой\"",
+    @Operation(summary = "Просмотр объекта \"Отчет данных пользователя, интересующегося собакой\" по чат-айди",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Объект \"Отчет данных пользователя, интересующегося собакой\", найденный по чат-айди",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ReportDog.class)
+                            )
+                    ),
+                    @ApiResponse(responseCode = "400",
+                            description = "Объект \"Отчет данных пользователя, интересующегося собакой\" по данному чат-айди не найден!")
+            }
+    )
+    @GetMapping("/{chatId}")
+    public ReportDog downloadReportByChatId(@Parameter(description = "чат-айди объекта \"Отчет данных пользователя, интересующегося собакой\"", example = "956120008L")
+                                            @PathVariable Long chatId) {
+        return this.reportDogService.findByUserDog_ChatId(chatId);
+    }
+
+    @Operation(summary = "Просмотр списка объектов \"Отчет данных пользователя, интересующегося собакой\" по чат-айди",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Список объектов \"Отчет данных пользователя, интересующегося собакой\", найденный по чат-айди",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ReportDog.class)
+                            )
+                    ),
+                    @ApiResponse(responseCode = "400",
+                            description = "Список объектов \"Отчет данных пользователя, интересующегося собакой\" по данному чат-айди не найден!")
+            }
+    )
+    @GetMapping("/{all_reports_by_chatId}")
+    public ReportDog downloadAllReportByChatId(@Parameter(description = "чат-айди объекта \"Отчет данных пользователя, интересующегося собакой\"", example = "956120008L")
+                                               @PathVariable Long chatId) {
+        return (ReportDog) this.reportDogService.findAllByUserDog_ChatId(chatId);
+    }
+
+    @Operation(summary = "Просмотр фото по айди объекта \"Отчет данных пользователя, интересующегося собакой\"",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "Фото, найденное по чат-айди объекта \"Отчет о данных пользователя, интересующегося собакой\""
+                    description = "Фото, найденное по чат-айди объекта \"Отчет данных пользователя, интересующегося собакой\""
             )
     )
     @GetMapping("/{id}/photo_from_db")
-    public ResponseEntity<String> downloadPhotoFromDB(@Parameter(description = "айди объекта \"Отчет о данных пользователя, интересующегося собакой\"", example = "956120008L")
+    public ResponseEntity<String> downloadPhotoFromDB(@Parameter(description = "айди объекта \"Отчет данных пользователя, интересующегося собакой\"", example = "956120008L")
                                                       @PathVariable Long id) {
         ReportDog report = this.reportDogService.findById(id);
         HttpHeaders headers = new HttpHeaders();
