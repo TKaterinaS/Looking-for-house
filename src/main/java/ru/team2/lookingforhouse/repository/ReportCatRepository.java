@@ -4,7 +4,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ru.team2.lookingforhouse.model.ReportCat;
 
-import java.util.Set;
+import java.util.Collection;
+
 /**
  * Интерфейс ReportCatRepository
  * @author Одокиенко Екатерина
@@ -17,11 +18,11 @@ public interface ReportCatRepository extends JpaRepository<ReportCat, Long> {
      * Метод получения списка у объекта "Пользователь, интересующийся котом" по чат-айди.
      * @param chatId
      */
-    Set<ReportCat>findAllByUserCat_ChatId(Long chatId);
+    Collection <ReportCat> findAllByUserCat_ChatId(Long chatId);
     /**
      * Метод получения объекта "Пользователь, интересующийся котом" по чат-айди.
      * @param chatId
      */
-    Set<ReportCat>findByUserCat_ChatId(Long chatId);
+    ReportCat findByUserCat_ChatId(Long chatId);
 
 }

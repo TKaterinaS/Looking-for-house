@@ -80,7 +80,7 @@ public class ReportDogService {
      */
     public ReportDog findByUserDog_ChatId(Long chatId) {
         log.info("Был вызван метод получения объекта \"Отчет данных пользователя, интересующегося собакой\" по chatId={}", chatId);
-        return (ReportDog) this.reportDogRepository.findByUserDog_ChatId(chatId);
+        return this.reportDogRepository.findByUserDog_ChatId(chatId);
     }
 
     /**
@@ -112,7 +112,7 @@ public class ReportDogService {
      * @return {@link ReportDogRepository#findAllByUserDog_ChatId(Long)} ()}
      * @see ReportDogService
      */
-    public Collection<ReportDog> findAllByUserDog_ChatId(Long chatId) {
+    public Collection <ReportDog> findAllByUserDog_ChatId(Long chatId) {
         log.info("Был вызван метод  получения списка всех объектов \"Отчет данных пользователя, интересующегося собакой\" по chatId={}", chatId);
         return this.reportDogRepository.findAllByUserDog_ChatId(chatId);
     }

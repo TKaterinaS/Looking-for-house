@@ -43,7 +43,7 @@ public class UserDogService {
      * @return {@link UserDogRepository#findByChatId(Long)}
      * @see UserDogService
      */
-    public Collection<UserDog> findByChatId(Long chatId) {
+    public UserDog findByChatId(Long chatId) {
         log.info("Вы вызвали метод получения объекта \"Пользователь, интересующийся собакой\" по chatId={}", chatId);
         return this.userDogRepository.findByChatId(chatId);
     }

@@ -79,7 +79,7 @@ public class ReportCatService {
      */
     public ReportCat findByUserCat_ChatId(Long chatId) {
         log.info("Был вызван метод получения объекта \"Отчет данных пользователя, интересующегося котом\" по chatId={}", chatId);
-        return (ReportCat) this.reportCatRepository.findByUserCat_ChatId(chatId);
+        return this.reportCatRepository.findByUserCat_ChatId(chatId);
     }
 
     /**
@@ -111,7 +111,7 @@ public class ReportCatService {
      * @return {@link ReportCatRepository#findAllByUserCat_ChatId(Long)} ()}
      * @see ReportCatService
      */
-    public Collection<ReportCat> findAllByUserCat_ChatId(Long chatId) {
+    public Collection <ReportCat> findAllByUserCat_ChatId(Long chatId) {
         log.info("Был вызван метод  получения списка всех объектов \"Отчет данных пользователя, интересующегося котом\" по chatId={}", chatId);
         return this.reportCatRepository.findAllByUserCat_ChatId(chatId);
     }

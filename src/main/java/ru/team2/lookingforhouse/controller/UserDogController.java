@@ -44,7 +44,7 @@ public class UserDogController {
     @GetMapping("/{chatId}")
     public UserDog getByChatId(@Parameter(description = "id объекта \"Пользователь, интересующийся собакой\"", example = "956120008L")
                            @PathVariable Long chatId) {
-        return (UserDog) userDogService.findByChatId(chatId);
+        return userDogService.findByChatId(chatId);
     }
 
     @Operation(summary = "Создание объекта \"Пользователь, интересующийся собакой\"",

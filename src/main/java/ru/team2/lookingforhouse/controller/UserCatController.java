@@ -44,7 +44,7 @@ public class UserCatController {
     @GetMapping("/{chatId}")
     public UserCat getByChatId(@Parameter(description = "id объекта \"Пользователь, интересующийся котом\"", example = "956120008L")
                            @PathVariable Long chatId) {
-        return (UserCat) userCatService.findByChatId(chatId);
+        return userCatService.findByChatId(chatId);
     }
 
     @Operation(summary = "Создание объекта \"Пользователь, интересующийся котом\"",

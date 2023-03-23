@@ -2,10 +2,7 @@ package ru.team2.lookingforhouse.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import ru.team2.lookingforhouse.model.UserCat;
 import ru.team2.lookingforhouse.model.UserDog;
-
-import java.util.Set;
 /**
  * Интерфейс UserDogRepository.
  * @author Одокиенко Екатерина
@@ -19,5 +16,5 @@ public interface UserDogRepository extends JpaRepository<UserDog,Long> {
      * Метод получения объекта "Пользователь, интересующийся собакой" по чат-айди.
      * @param chatId
      */
-    Set<UserDog> findByChatId(Long chatId);
+    UserDog findByChatId(Long chatId);
 }

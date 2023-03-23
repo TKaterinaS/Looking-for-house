@@ -1,7 +1,6 @@
 package ru.team2.lookingforhouse.service;
 
 import lombok.extern.log4j.Log4j2;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import ru.team2.lookingforhouse.exception.UserCatNotFoundException;
 import ru.team2.lookingforhouse.model.UserCat;
@@ -45,7 +44,7 @@ public class UserCatService {
      * @return {@link UserCatRepository#findByChatId(Long)}
      * @see UserCatService
      */
-    public Collection<UserCat> findByChatId(Long chatId) {
+    public UserCat findByChatId(Long chatId) {
         log.info("Вы вызвали метод получения объекта \"Пользователь, интересующийся котом\" по chatId={}", chatId);
         return this.userCatRepository.findByChatId(chatId);
     }
