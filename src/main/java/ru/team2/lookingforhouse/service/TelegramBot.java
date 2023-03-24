@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
@@ -850,8 +851,8 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void registerUserDog(Message msg) {
 //        по чат-айди проверяем, что такого пользователя в таблице ещё нет
         if (userDogRepository.findById(msg.getChatId()).isEmpty()) {
-            var chatId = msg.getChatId();
-            var chat = msg.getChat();
+            long chatId = msg.getChatId();
+            Chat chat = msg.getChat();
 //            создаем нового пользователя и присваиваем ему данные пользователя, которого регистрируем
             UserDog userDog = new UserDog();
             userDog.setChatId(chatId);

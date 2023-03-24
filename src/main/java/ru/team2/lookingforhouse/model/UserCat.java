@@ -5,9 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.team2.lookingforhouse.util.StatusAttributeConverter;
 import ru.team2.lookingforhouse.util.UserStatus;
-
 import javax.persistence.*;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -28,6 +26,4 @@ public class UserCat {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userCat")
     List<ReportCat> reports;
-
-
 }
