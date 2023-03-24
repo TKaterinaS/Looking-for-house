@@ -7,6 +7,8 @@ public class Constant {
    public final static String ADDRESS_DOG_BUTTON = "ADDRESS_DOG_BUTTON";
    public final static String ADDRESS_CAT_BUTTON = "ADDRESS_CAT_BUTTON";
    public final static String DRIVING_DIRECTIONS_DOG_BUTTON = "DRIVING_DIRECTIONS_DOG_BUTTON";
+   public final static String DRIVING_DIRECTIONS_DOG_LINK = "Схема проезда по ссылке:\nhttps://clck.ru/33rhcp";
+   public final static String DRIVING_DIRECTIONS_CAT_LINK = "Схема проезда по ссылке: \nhttps://clck.ru/33rhma";
    public final static String DRIVING_DIRECTIONS_CAT_BUTTON = "DRIVING_DIRECTIONS_CAT_BUTTON";
    public final static String SAFETY_PRECAUTIONS_DOG_BUTTON = "SAFETY_PRECAUTIONS_DOG_BUTTON";
    public final static String SAFETY_PRECAUTIONS_CAT_BUTTON = "SAFETY_PRECAUTIONS_CAT_BUTTON";
