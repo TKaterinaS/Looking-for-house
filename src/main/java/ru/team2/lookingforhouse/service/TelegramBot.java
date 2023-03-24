@@ -907,7 +907,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     /**
      * метод, который генерирует рандомный чат-айди одного из волонтёров
      */
-    private long generateRandomChatId() {
+    public long generateRandomChatId() {
         List<Long> chatIdList = List.of(956120008L, 198498708L, 921797425L, 1911144874L, 1837692225L, 5242769604L);
         int randValue = (int) (Math.random() * chatIdList.size());
         return chatIdList.get(randValue);
