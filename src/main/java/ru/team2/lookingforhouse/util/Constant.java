@@ -32,8 +32,7 @@ public class Constant {
    public final static String CYNOLOGISTS_BUTTON = "CYNOLOGISTS_BUTTON";
    public final static String VET_CENTER_BUTTON = "VET_CENTER_BUTTON";
    public final static String REASONS_FOR_REFUSAL_BUTTON = "REASONS_FOR_REFUSAL_BUTTON";
-   public final static String SAVE_CONTACT_DOG_BUTTON = "SAVE_CONTACT_DOG_BUTTON";
-   public final static String SAVE_CONTACT_CAT_BUTTON = "SAVE_CONTACT_CAT_BUTTON";
+   public final static String SAVE_CONTACT_BUTTON = "SAVE_CONTACT_BUTTON";
 
    public static final String REGEX_MESSAGE = "(Рацион:)(\\s)(\\W+)(;)\n" +
            "(Самочувствие:)(\\s)(\\W+)(;)\n" +

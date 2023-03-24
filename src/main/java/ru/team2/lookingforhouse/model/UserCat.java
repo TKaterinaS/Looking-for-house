@@ -18,6 +18,7 @@ public class UserCat {
     private Long chatId;
     private String firstName;
     private String lastName;
+    private String userName;
     private String phoneNumber;
     private LocalDateTime registeredAt;
 
@@ -26,4 +27,5 @@ public class UserCat {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userCat")
     List<ReportCat> reports;
+
 }

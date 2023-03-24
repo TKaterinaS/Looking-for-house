@@ -20,6 +20,7 @@ public class UserDog {
     private Long chatId;
     private String firstName;
     private String lastName;
+    private String userName;
     private String phoneNumber;
     private LocalDateTime registeredAt;
 

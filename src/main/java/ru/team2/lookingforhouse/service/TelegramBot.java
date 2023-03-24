@@ -11,10 +11,15 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import ru.team2.lookingforhouse.config.BotConfig;
@@ -28,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static ru.team2.lookingforhouse.util.Constant.*;
 import static ru.team2.lookingforhouse.util.UserStatus.*;
@@ -94,6 +100,8 @@ public class TelegramBot extends TelegramLongPollingBot {
                 }
 //                выполнение команды /call_volunteer (вызов волонтера)
                 case "/call_volunteer" -> sendMsgToVolunteer(chatId, userName);
+
+                case "Назад" -> sendMessage(chatId, null);
 
 //                дефолтное сообщение, если бот получит неизвестную ему команду
                 default -> sendMessage(chatId, "Нераспознанная команда, попробуйте ещё раз");
@@ -397,11 +405,8 @@ public class TelegramBot extends TelegramLongPollingBot {
                     sendMessage(chatId, refusal);
                     break;
                 /*Сохранить контакты того, кто выбрал приют собак*/
-                case SAVE_CONTACT_DOG_BUTTON:
-                    //написать метод, который дубет сохранять в бд юзеров собак
-                    break;
-                /*Сохранить контакты того, кто выбрал приют кошек*/
-                case SAVE_CONTACT_CAT_BUTTON:
+                case SAVE_CONTACT_BUTTON:
+                    sendMessageWithContactKeyboard(chatId);
                     //написать метод, который дубет сохранять в бд юзеров собак
                     break;
                 case SUBMIT_REPORT_BUTTON:
@@ -422,6 +427,14 @@ public class TelegramBot extends TelegramLongPollingBot {
                     break;
             }
 
+        } else if (update.hasMessage() && update.getMessage().hasContact()) {
+            long chatId = update.getMessage().getChatId();
+            if (userCatRepository.findByChatId(chatId) != null) {
+                saveContactButton(update, false);
+            } else if (userDogRepository.findByChatId(chatId) != null) {
+                saveContactButton(update, true);
+            }
+            sendMessage(chatId, "Данные успешно сохранены");
         }
     }
 
@@ -696,7 +709,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         var saveContactButton = new InlineKeyboardButton();
         saveContactButton.setText("Могу записать Ваши контактные данные.");
-        saveContactButton.setCallbackData(SAVE_CONTACT_DOG_BUTTON);
+        saveContactButton.setCallbackData(SAVE_CONTACT_BUTTON);
 
         var callVolunteerButton = new InlineKeyboardButton();
         callVolunteerButton.setText("Позвать волонтера");
@@ -778,7 +791,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         var saveContactButton = new InlineKeyboardButton();
         saveContactButton.setText("Могу записать Ваши контактные данные.");
-        saveContactButton.setCallbackData(SAVE_CONTACT_CAT_BUTTON);
+        saveContactButton.setCallbackData(SAVE_CONTACT_BUTTON);
 
         var callVolunteerButton = new InlineKeyboardButton();
         callVolunteerButton.setText("Позвать волонтера");
@@ -886,6 +899,19 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
+    public void sendMessage(long chatId, String textToSend, ReplyKeyboard keyboard) {
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(String.valueOf(chatId));
+        sendMessage.setText(textToSend);
+        sendMessage.setReplyMarkup(keyboard);
+        //sendMessage.setParseMode(ParseMode.HTML);
+        try {
+            execute(sendMessage);
+        } catch (TelegramApiException e) {
+            log.error("Error occurred: " + e.getMessage());
+        }
+    }
+
     /**
      * * метод, который вызывается при выполнении команды /call_volunteer
      *
@@ -913,6 +939,69 @@ public class TelegramBot extends TelegramLongPollingBot {
         return chatIdList.get(randValue);
     }
 
+    public void sendMessageWithContactKeyboard(long chatId) {
+        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+        replyKeyboardMarkup.setSelective(true);
+        replyKeyboardMarkup.setResizeKeyboard(true);
+        replyKeyboardMarkup.setOneTimeKeyboard(true);
+
+        KeyboardRow keyboardRow1 = new KeyboardRow();
+        KeyboardButton contact = new KeyboardButton("Отослать свои контакты");
+        contact.setRequestContact(true);
+        keyboardRow1.add(contact);
+
+        KeyboardRow keyboardRow2 = new KeyboardRow();
+        keyboardRow2.add("Назад");
+
+        List<KeyboardRow> keyboard = new ArrayList<>();
+        keyboard.add(keyboardRow1);
+        keyboard.add(keyboardRow2);
+
+        replyKeyboardMarkup.setKeyboard(keyboard);
+
+        sendMessage(chatId, "Выбирите что хотите отправить", replyKeyboardMarkup);
+    }
+
+    private void saveContactButton(Update update, boolean isDog) {
+        User user = update.getMessage().getFrom();
+        if (!isDog) {
+            UserCat persistentUserCat = userCatRepository.findByChatId(user.getId());
+            if (persistentUserCat == null) {
+                UserCat transientUserCat= new UserCat();
+                transientUserCat.setChatId(user.getId());
+                transientUserCat.setFirstName(user.getFirstName());
+                transientUserCat.setLastName(user.getLastName());
+                transientUserCat.setUserName(user.getUserName());
+                transientUserCat.setPhoneNumber(update.getMessage().getContact().getPhoneNumber());
+                userCatRepository.save(transientUserCat);
+            } else {
+                persistentUserCat.setChatId(user.getId());
+                persistentUserCat.setFirstName(user.getFirstName());
+                persistentUserCat.setLastName(user.getLastName());
+                persistentUserCat.setUserName(user.getUserName());
+                persistentUserCat.setPhoneNumber(update.getMessage().getContact().getPhoneNumber());
+                userCatRepository.save(persistentUserCat);
+            }
+        } else {
+            UserDog persistentUserDog = userDogRepository.findByChatId(user.getId());
+            if (persistentUserDog == null) {
+                UserDog transientUserDog= new UserDog();
+                transientUserDog.setChatId(user.getId());
+                transientUserDog.setFirstName(user.getFirstName());
+                transientUserDog.setLastName(user.getLastName());
+                transientUserDog.setUserName(user.getUserName());
+                transientUserDog.setPhoneNumber(update.getMessage().getContact().getPhoneNumber());
+                userDogRepository.save(transientUserDog);
+            } else {
+                persistentUserDog.setChatId(user.getId());
+                persistentUserDog.setFirstName(user.getFirstName());
+                persistentUserDog.setLastName(user.getLastName());
+                persistentUserDog.setUserName(user.getUserName());
+                persistentUserDog.setPhoneNumber(update.getMessage().getContact().getPhoneNumber());
+                userDogRepository.save(persistentUserDog);
+            }
+        }
+    }
     public void getReport(Update update) {
         Pattern pattern = Pattern.compile(REGEX_MESSAGE);
         Matcher matcher = pattern.matcher(update.getMessage().getCaption());
