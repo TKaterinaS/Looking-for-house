@@ -432,9 +432,9 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         } else if (update.hasMessage() && update.getMessage().hasContact()) {
             long chatId = update.getMessage().getChatId();
-            if (userCatRepository.findByChatId(chatId) != null) {
+            if (userCatRepository.findUserCatByChatId(chatId) != null) {
                 saveContactButton(update, false);
-            } else if (userDogRepository.findByChatId(chatId) != null) {
+            } else if (userDogRepository.findUserDogByChatId(chatId) != null) {
                 saveContactButton(update, true);
             }
             sendMessage(chatId, "Данные успешно сохранены");
@@ -968,7 +968,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void saveContactButton(Update update, boolean isDog) {
         User user = update.getMessage().getFrom();
         if (!isDog) {
-            UserCat persistentUserCat = userCatRepository.findByChatId(user.getId());
+            UserCat persistentUserCat = userCatRepository.findUserCatByChatId(user.getId());
             if (persistentUserCat == null) {
                 UserCat transientUserCat= new UserCat();
                 transientUserCat.setChatId(user.getId());
@@ -986,7 +986,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 userCatRepository.save(persistentUserCat);
             }
         } else {
-            UserDog persistentUserDog = userDogRepository.findByChatId(user.getId());
+            UserDog persistentUserDog = userDogRepository.findUserDogByChatId(user.getId());
             if (persistentUserDog == null) {
                 UserDog transientUserDog= new UserDog();
                 transientUserDog.setChatId(user.getId());

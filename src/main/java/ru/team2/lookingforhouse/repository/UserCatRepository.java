@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ru.team2.lookingforhouse.model.UserCat;
 
+import java.util.Optional;
+
 /**
  * Интерфейс UserDogRepository.
  * @author Одокиенко Екатерина
@@ -18,5 +20,5 @@ public interface UserCatRepository extends JpaRepository<UserCat,Long> {
      * Метод получения объекта "Пользователь, интересующийся котом" по чат-айди.
      * @param chatId
      */
-    UserCat findByChatId(Long chatId);
+    UserCat findUserCatByChatId(Long chatId);
 }

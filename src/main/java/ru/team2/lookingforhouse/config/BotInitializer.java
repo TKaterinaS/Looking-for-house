@@ -10,12 +10,12 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 import ru.team2.lookingforhouse.service.TelegramBot;
 
+import javax.annotation.PostConstruct;
+
 @Slf4j
 @Component
 public class BotInitializer {
-
     private final TelegramBot bot;
-
     @Autowired
     public BotInitializer(TelegramBot bot) {
         this.bot = bot;

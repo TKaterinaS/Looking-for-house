@@ -41,12 +41,12 @@ public class UserCatService {
      * Метод получения объекта "Пользователь, интересующийся котом" по чат-айди, который присваивается Телеграмм-ботом
      *
      * @param chatId
-     * @return {@link UserCatRepository#findByChatId(Long)}
+     * @return {@link UserCatRepository#findUserCatByChatId(Long)}
      * @see UserCatService
      */
     public UserCat findByChatId(Long chatId) {
         log.info("Вы вызвали метод получения объекта \"Пользователь, интересующийся котом\" по chatId={}", chatId);
-        return this.userCatRepository.findByChatId(chatId);
+        return this.userCatRepository.findUserCatByChatId(chatId);
     }
 
     /**

@@ -40,12 +40,12 @@ public class UserDogService {
      * Метод получения объекта "Пользователь, интересующийся собакой" по чат-айди, который присваивается Телеграмм-ботом
      *
      * @param chatId
-     * @return {@link UserDogRepository#findByChatId(Long)}
+     * @return {@link UserDogRepository#findUserDogByChatId(Long)}
      * @see UserDogService
      */
     public UserDog findByChatId(Long chatId) {
         log.info("Вы вызвали метод получения объекта \"Пользователь, интересующийся собакой\" по chatId={}", chatId);
-        return this.userDogRepository.findByChatId(chatId);
+        return this.userDogRepository.findUserDogByChatId(chatId);
     }
 
     /**
