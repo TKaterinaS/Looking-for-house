@@ -949,7 +949,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         replyKeyboardMarkup.setOneTimeKeyboard(true);
 
         KeyboardRow keyboardRow1 = new KeyboardRow();
-        KeyboardButton contact = new KeyboardButton("Отослать свои контакты");
+        KeyboardButton contact = new KeyboardButton("Отправить свои контакты");
         contact.setRequestContact(true);
         keyboardRow1.add(contact);
 
@@ -962,7 +962,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         replyKeyboardMarkup.setKeyboard(keyboard);
 
-        sendMessage(chatId, "Выбирите что хотите отправить", replyKeyboardMarkup);
+        sendMessage(chatId, "Выберите, что хотите отправить", replyKeyboardMarkup);
     }
 
     private void saveContactButton(Update update, boolean isDog) {
