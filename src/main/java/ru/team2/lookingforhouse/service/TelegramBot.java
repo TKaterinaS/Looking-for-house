@@ -202,23 +202,19 @@ public class TelegramBot extends TelegramLongPollingBot {
                     break;
                 /*Правила знакомства с собакой до того, как можно забрать ее из приюта.*/
                 case RULES_DOG_BUTTON: {
-                    String rules = "1. Перед тем как принять решение завести домашнего питомца, " +
-                            "вам нужно узнать о наличии аллергии на животных у себя или у проживающих с вами родственников.\n" +
-                            "2. Чтобы наладить взаимоотношения с выбранным для пристройства песиком, можно взять его на прогулку, " +
-                            "угостить собачьим лакомством, попробовать взять на руки. Постепенно животное привыкнет и пойдет навстречу." +
-                            " В отдельных ситуациях можно пригласить кинолога или зоопсихолога.\n" +
-                            "3. при выборе конкретного животного стоит обратить внимание на чувства, возникающие при общении с ним.";
+                    String rules = """
+                            1. Перед тем как принять решение завести домашнего питомца, вам нужно узнать о наличии аллергии на животных у себя или у проживающих с вами родственников.
+                            2. Чтобы наладить взаимоотношения с выбранным для пристройства песиком, можно взять его на прогулку, угостить собачьим лакомством, попробовать взять на руки. Постепенно животное привыкнет и пойдет навстречу. В отдельных ситуациях можно пригласить кинолога или зоопсихолога.
+                            3. при выборе конкретного животного стоит обратить внимание на чувства, возникающие при общении с ним.""";
                     sendMessage(chatId, rules);
                     break;
                 }
                 /*Правила знакомства с котом до того, как можно забрать его из приюта.*/
                 case RULES_CAT_BUTTON: {
-                    String rules = "1.Перед тем как принять решение завести домашнего питомца, " +
-                            "вам нужно узнать о наличии аллергии на животных у себя или у проживающих с вами родственников.\n" +
-                            "2.Чтобы наладить взаимоотношения с выбранным Котиком можно прикормить его кошачьими вкусняшками," +
-                            " попробовать взять на руки. Постепенно животное привыкнет и пойдет навстречу." +
-                            " В отдельных ситуациях можно пригласить зоопсихолога.\n" +
-                            "3.При выборе конкретного животного стоит обратить внимание на чувства, возникающие при общении с ним.";
+                    String rules = """
+                            1.Перед тем как принять решение завести домашнего питомца, вам нужно узнать о наличии аллергии на животных у себя или у проживающих с вами родственников.
+                            2.Чтобы наладить взаимоотношения с выбранным Котиком можно прикормить его кошачьими вкусняшками, попробовать взять на руки. Постепенно животное привыкнет и пойдет навстречу. В отдельных ситуациях можно пригласить зоопсихолога.
+                            3.При выборе конкретного животного стоит обратить внимание на чувства, возникающие при общении с ним.""";
                     sendMessage(chatId, rules);
                     break;
                 }
@@ -970,7 +966,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         if (!isDog) {
             UserCat persistentUserCat = userCatRepository.findUserCatByChatId(user.getId());
             if (persistentUserCat == null) {
-                UserCat transientUserCat= new UserCat();
+                UserCat transientUserCat = new UserCat();
                 transientUserCat.setChatId(user.getId());
                 transientUserCat.setFirstName(user.getFirstName());
                 transientUserCat.setLastName(user.getLastName());
@@ -988,7 +984,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         } else {
             UserDog persistentUserDog = userDogRepository.findUserDogByChatId(user.getId());
             if (persistentUserDog == null) {
-                UserDog transientUserDog= new UserDog();
+                UserDog transientUserDog = new UserDog();
                 transientUserDog.setChatId(user.getId());
                 transientUserDog.setFirstName(user.getFirstName());
                 transientUserDog.setLastName(user.getLastName());
@@ -1005,6 +1001,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             }
         }
     }
+
     public void getReport(Update update) {
         Pattern pattern = Pattern.compile(REGEX_MESSAGE);
         Matcher matcher = pattern.matcher(update.getMessage().getCaption());
