@@ -43,7 +43,7 @@ import static ru.team2.lookingforhouse.util.UserStatus.*;
 public class TelegramBot extends TelegramLongPollingBot {
     private final UserCatRepository userCatRepository;
     private final UserDogRepository userDogRepository;
-    final BotConfig config;
+    private final BotConfig config;
 
     @Autowired
     public TelegramBot(BotConfig config, UserCatRepository userCatRepository, UserDogRepository userDogRepository) {
