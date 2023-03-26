@@ -22,7 +22,7 @@ public class ReportDog {
     @Column(name = "photo_id")
     private String photoId;
     @ManyToOne
-    @JoinColumn(name = "id")
+
     @JsonBackReference
     private UserDog userDog;
 }
