@@ -22,7 +22,7 @@ public class ReportCat {
     @Column(name = "photo_id")
     private String photoId;
     @ManyToOne
-    @JoinColumn(name = "id")
+
     @JsonBackReference
     private UserCat userCat;
 }
