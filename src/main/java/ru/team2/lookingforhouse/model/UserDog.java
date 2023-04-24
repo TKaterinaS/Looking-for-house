@@ -34,7 +34,6 @@ public class UserDog {
     @CreationTimestamp
     private LocalDateTime registeredAt;
     @Convert(converter = StatusAttributeConverter.class)
-    @Enumerated(EnumType.STRING)
     private UserStatus userStatus;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userDog")
     @JsonManagedReference

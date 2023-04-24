@@ -22,7 +22,6 @@ public class ReportCat {
     @Column(name = "photo_id")
     private String photoId;
     @ManyToOne
-
     @JsonBackReference
     private UserCat userCat;
 }
