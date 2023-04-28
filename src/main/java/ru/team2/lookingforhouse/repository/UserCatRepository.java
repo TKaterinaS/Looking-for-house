@@ -9,16 +9,18 @@ import java.util.Optional;
 
 /**
  * Интерфейс UserDogRepository.
+ *
  * @author Одокиенко Екатерина
  */
 
 /** Механизм для хранения, извлечения, обновления, удаления и поиска объектов. */
 @Repository
 
-public interface UserCatRepository extends JpaRepository<UserCat,Long> {
+public interface UserCatRepository extends JpaRepository<UserCat, Long> {
     /**
      * Метод получения объекта "Пользователь, интересующийся котом" по чат-айди.
-     * @param chatId
+     * @param chatId параметром является чат-айди пользователя
+     *
      */
     UserCat findUserCatByChatId(Long chatId);
 }

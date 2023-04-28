@@ -98,9 +98,6 @@ public class TelegramBot extends TelegramLongPollingBot {
                 }
 //                выполнение команды /call_volunteer (вызов волонтера)
                 case "/call_volunteer" -> sendMsgToVolunteer(chatId, userName);
-
-                case "Назад" -> sendMessage(chatId, null);
-
 //                дефолтное сообщение, если бот получит неизвестную ему команду
                 default -> sendMessage(chatId, "Нераспознанная команда, попробуйте ещё раз");
             }
@@ -113,35 +110,27 @@ public class TelegramBot extends TelegramLongPollingBot {
             String userName = update.getCallbackQuery().getMessage().getChat().getFirstName();
 //            Адрес, контакты, часы работы приюта для собак
             switch (callbackData) {
-                case ADDRESS_DOG_BUTTON:
-                    sendMessage(chatId, """
-                            ЖК Инфинити, Кабанбай батыра, 40, Астана 010000, Казахстан
-                            Телефон: +7 707 818 0770
-                            Часы работы: 9:00 - 21:00
-                            """);
+                case ADDRESS_DOG_BUTTON -> sendMessage(chatId, """
+                        ЖК Инфинити, Кабанбай батыра, 40, Астана 010000, Казахстан
+                        Телефон: +7 707 818 0770
+                        Часы работы: 9:00 - 21:00
+                        """);
 
-                    break;
 //                Адрес, контакты, часы работы приюта для котов
-                case ADDRESS_CAT_BUTTON:
-                    sendMessage(chatId, """
-                            улица Бейбитшилик 67, Астана 010000, Казахстан
-                            Телефон: +7 701 874 3939
-                            Часы работы: 10:00 - 20:00
-                            """);
+                case ADDRESS_CAT_BUTTON -> sendMessage(chatId, """
+                        улица Бейбитшилик 67, Астана 010000, Казахстан
+                        Телефон: +7 701 874 3939
+                        Часы работы: 10:00 - 20:00
+                        """);
 
-                    break;
                 /*Схема проезда в приют для собак*/
-                case DRIVING_DIRECTIONS_DOG_BUTTON:
-                    sendMessage(chatId, DRIVING_DIRECTIONS_DOG_LINK);
+                case DRIVING_DIRECTIONS_DOG_BUTTON -> sendMessage(chatId, DRIVING_DIRECTIONS_DOG_LINK);
 
-                    break;
                 /*Схема проезда в приют для котов*/
-                case DRIVING_DIRECTIONS_CAT_BUTTON:
-                    sendMessage(chatId, DRIVING_DIRECTIONS_CAT_LINK);
+                case DRIVING_DIRECTIONS_CAT_BUTTON -> sendMessage(chatId, DRIVING_DIRECTIONS_CAT_LINK);
 
-                    break;
                 /*Правила поведения с собаками*/
-                case SAFETY_PRECAUTIONS_DOG_BUTTON: {
+                case SAFETY_PRECAUTIONS_DOG_BUTTON -> {
                     String rules = """
                             Правила поведения с собаками.
                             В приюте обязательно слушайте, что говорит работник или волонтер.
@@ -154,8 +143,9 @@ public class TelegramBot extends TelegramLongPollingBot {
 
                     break;
                 }
+
                 /*Правила поведения с котами*/
-                case SAFETY_PRECAUTIONS_CAT_BUTTON: {
+                case SAFETY_PRECAUTIONS_CAT_BUTTON -> {
                     String rules = """
                             Правила поведения с кошками.
                             Общаясь с кошками, помните об их желаниях и потребностях.
@@ -168,39 +158,34 @@ public class TelegramBot extends TelegramLongPollingBot {
                     sendMessage(chatId, rules);
                     break;
                 }
+
                 /*Вызов волонтера*/
-                case CALL_VOLUNTEER_BUTTON:
-                    sendMsgToVolunteer(chatId, userName);
-                    break;
+                case CALL_VOLUNTEER_BUTTON -> sendMsgToVolunteer(chatId, userName);
+
                 /*Вызов кнопок, содержащих информацию по приюту для собак*/
-                case DOG_BUTTON:
+                case DOG_BUTTON -> {
                     registerUserDog(update.getCallbackQuery().getMessage());
                     startDog(chatId);
-                    break;
+                }
                 /*Вызов кнопок, содержащих информацию по приюту для котов*/
-                case CAT_BUTTON:
+                case CAT_BUTTON -> {
                     registerUserCat(update.getCallbackQuery().getMessage());
                     startCat(chatId);
-                    break;
+                }
                 /*Общая информация о приюте для собак*/
-                case INFO_DOG_BUTTON:
-                    infoDog(chatId);
-                    break;
-                /*Общая информация о приюте для котов*/
-                case INFO_CAT_BUTTON:
-                    infoCat(chatId);
-                    break;
-                /*Вызов кнопок. Как взять собаку из приюта*/
-                case TO_ADOPT_DOG_BUTTON:
-                    howToAdoptDog(chatId);
+                case INFO_DOG_BUTTON -> infoDog(chatId);
 
-                    break;
+                /*Общая информация о приюте для котов*/
+                case INFO_CAT_BUTTON -> infoCat(chatId);
+
+                /*Вызов кнопок. Как взять собаку из приюта*/
+                case TO_ADOPT_DOG_BUTTON -> howToAdoptDog(chatId);
+
                 /*Вызов кнопок. Как взять кота из приюта*/
-                case TO_ADOPT_CAT_BUTTON:
-                    howToAdoptCat(chatId);
-                    break;
+                case TO_ADOPT_CAT_BUTTON -> howToAdoptCat(chatId);
+
                 /*Правила знакомства с собакой до того, как можно забрать ее из приюта.*/
-                case RULES_DOG_BUTTON: {
+                case RULES_DOG_BUTTON -> {
                     String rules = """
                             1. Перед тем как принять решение завести домашнего питомца, вам нужно узнать о наличии аллергии на животных у себя или у проживающих с вами родственников.
                             2. Чтобы наладить взаимоотношения с выбранным для пристройства песиком, можно взять его на прогулку, угостить собачьим лакомством, попробовать взять на руки. Постепенно животное привыкнет и пойдет навстречу. В отдельных ситуациях можно пригласить кинолога или зоопсихолога.
@@ -208,8 +193,9 @@ public class TelegramBot extends TelegramLongPollingBot {
                     sendMessage(chatId, rules);
                     break;
                 }
+
                 /*Правила знакомства с котом до того, как можно забрать его из приюта.*/
-                case RULES_CAT_BUTTON: {
+                case RULES_CAT_BUTTON -> {
                     String rules = """
                             1.Перед тем как принять решение завести домашнего питомца, вам нужно узнать о наличии аллергии на животных у себя или у проживающих с вами родственников.
                             2.Чтобы наладить взаимоотношения с выбранным Котиком можно прикормить его кошачьими вкусняшками, попробовать взять на руки. Постепенно животное привыкнет и пойдет навстречу. В отдельных ситуациях можно пригласить зоопсихолога.
@@ -217,8 +203,9 @@ public class TelegramBot extends TelegramLongPollingBot {
                     sendMessage(chatId, rules);
                     break;
                 }
+
                 /*Документы для того, чтобы забрать собаку из приюта*/
-                case DOC_DOG_BUTTON: {
+                case DOC_DOG_BUTTON -> {
                     String doc = """
                             1. Паспорт.
                             2. Договор заключённый между приютом и новым хозяином
@@ -229,8 +216,9 @@ public class TelegramBot extends TelegramLongPollingBot {
                     sendMessage(chatId, doc);
                     break;
                 }
+
                 /*Документы для того, чтобы забрать кота из приюта*/
-                case DOC_CAT_BUTTON: {
+                case DOC_CAT_BUTTON -> {
                     String doc = """
                             1. Паспорт.
                             2. Договор заключённый между приютом и новым хозяином
@@ -241,8 +229,9 @@ public class TelegramBot extends TelegramLongPollingBot {
                     sendMessage(chatId, doc);
                     break;
                 }
+
                 /*Рекомендации по транспортировке собаки*/
-                case TRANSPORTATION_DOG_BUTTON: {
+                case TRANSPORTATION_DOG_BUTTON -> {
                     String recTrans = """
                             1. Если это взрослая собака, необходимо заранее приобрести поводок и ошейник.
                             2. Если это щинок - при транспортировке в машине, необходимо предусмотреть, что бы переноска была пристёгнута ремнём безопасности.
@@ -250,8 +239,9 @@ public class TelegramBot extends TelegramLongPollingBot {
                     sendMessage(chatId, recTrans);
                     break;
                 }
+
                 /*Рекомендации по транспортировке кота*/
-                case TRANSPORTATION_CAT_BUTTON: {
+                case TRANSPORTATION_CAT_BUTTON -> {
                     String recTrans = """
                             1. Если это котёнок, необходимо приобрести переноску.
                             2. При транспортировке в машине, необходимо предусмотреть, что бы переноска была пристёгнута ремнём безопасности.
@@ -259,8 +249,9 @@ public class TelegramBot extends TelegramLongPollingBot {
                     sendMessage(chatId, recTrans);
                     break;
                 }
+
                 /*Рекомендации по обустройству дома для щенка*/
-                case RECOMMENDATION_PUPPY_BUTTON:
+                case RECOMMENDATION_PUPPY_BUTTON -> {
                     String recPuppy = """
                             1. Установите небольшие замки на кухонные шкафчики на уровне пола, особенно если там хранятся чистящие средства.
                             2. Установите специальный детский барьер что бы собака не заходило туда, куда ей не следует.
@@ -268,9 +259,9 @@ public class TelegramBot extends TelegramLongPollingBot {
                             4. Держите дверцы духовки, холодильника, микроволновой печи, сушильной и стиральной машин всегда закрытыми.
                             5. Постарайтесь найти такое место, где ваш питомец сможет играть и бегать, не рискуя своим здоровьем.""";
                     sendMessage(chatId, recPuppy);
-                    break;
+                }
                 /*Рекомендации по обустройству дома для котенка*/
-                case RECOMMENDATION_KITTY_BUTTON:
+                case RECOMMENDATION_KITTY_BUTTON -> {
                     String recKitty = """
                             1. Установите небольшие замки на кухонные шкафчики на уровне пола, особенно если там хранятся чистящие средства.
                             2.Держите двери в доме запертыми что бы животное  не заходило туда, куда ему не следует.
@@ -279,9 +270,9 @@ public class TelegramBot extends TelegramLongPollingBot {
                             5. Постарайтесь найти такое место, где ваш питомец сможет играть и бегать, не рискуя своим здоровьем.
                             6. Форточки в окнах должны быть обтянутыми москитной сеткой, что бы кошка или кот не выпали из окна в погоне за птицей.""";
                     sendMessage(chatId, recKitty);
-                    break;
+                }
                 /*Рекомендации по обустройству дома для кота*/
-                case RECOMMENDATION_CAT_BUTTON:
+                case RECOMMENDATION_CAT_BUTTON -> {
                     String recCat = """
                             1. Установите небольшие замки на кухонные шкафчики на уровне пола, особенно если там хранятся чистящие средства.
                             2.Держите двери в доме запертыми что бы животное  не заходило туда, куда ему не следует.
@@ -290,9 +281,9 @@ public class TelegramBot extends TelegramLongPollingBot {
                             5. Постарайтесь найти такое место, где ваш питомец сможет играть и бегать, не рискуя своим здоровьем.
                             6. Форточки в окнах должны быть обтянутыми москитной сеткой, что бы кошка или кот не выпали из окна в погоне за птицей.""";
                     sendMessage(chatId, recCat);
-                    break;
+                }
                 /*Рекомендации по обустройству дома для собаки*/
-                case RECOMMENDATION_DOG_BUTTON:
+                case RECOMMENDATION_DOG_BUTTON -> {
                     String recDog = EmojiParser.parseToUnicode
                             ("""
                                     1. Установите небольшие замки на кухонные шкафчики на уровне пола, особенно если там хранятся чистящие средства.
@@ -301,9 +292,9 @@ public class TelegramBot extends TelegramLongPollingBot {
                                     4. Держите дверцы духовки, холодильника, микроволновой печи, сушильной и стиральной машин всегда закрытыми.
                                     5. Постарайтесь найти такое место, где ваш питомец сможет играть и бегать, не рискуя своим здоровьем.""");
                     sendMessage(chatId, recDog);
-                    break;
+                }
                 /*Рекомендации для собак с ограниченными возможностями*/
-                case REC_HANDICAPPED_DOG_BUTTON: {
+                case REC_HANDICAPPED_DOG_BUTTON -> {
                     String vision = "Рекомендации для животного с ограниченными возможностями по зрению:\n" +
                             "Зрение - Может показаться, что отсутствие зрения у собаки станет сильной преградой " +
                             "для ее полноценной жизни, но слепой питомец достаточно быстро адаптируется к этой проблеме " +
@@ -339,8 +330,9 @@ public class TelegramBot extends TelegramLongPollingBot {
                     sendMessage(chatId, movement);
                     break;
                 }
+
                 /*Рекомендации для котов с ограниченными возможностями*/
-                case REC_HANDICAPPED_CAT_BUTTON: {
+                case REC_HANDICAPPED_CAT_BUTTON -> {
                     String vision = "Рекомендации для животного с ограниченными возможностями по зрению:\n" +
                             "Зрение - Может показаться, что отсутствие зрения у кота станет сильной преградой " +
                             "для ее полноценной жизни, но слепой питомец достаточно быстро адаптируется к этой проблеме " +
@@ -362,8 +354,9 @@ public class TelegramBot extends TelegramLongPollingBot {
                     sendMessage(chatId, movement);
                     break;
                 }
+
                 /*Советы кинолога по первичному общению с собакой*/
-                case ADVICES_CYNOLOGISTS_BUTTON:
+                case ADVICES_CYNOLOGISTS_BUTTON -> {
                     String advices = """
                             1. Не навязывайте собаке своё общество.
                             2. Не мешайте животному самостоятельно исследовать новое окружение.
@@ -371,17 +364,17 @@ public class TelegramBot extends TelegramLongPollingBot {
                             4. Не торопитесь ухаживать за собакой - кормить её, поить водой, гладить или затаскивать в ванну.
                             5. Если вы столкнулись со страхами собаки, действуйте спокойно и ласково.""";
                     sendMessage(chatId, advices);
-                    /*Проверенные кинологи*/
-                    break;
-                case CYNOLOGISTS_BUTTON:
+                }
+                /*Проверенные кинологи*/
+                case CYNOLOGISTS_BUTTON -> {
                     String cynolog = """
                             Проверенные кинологи для дальнейшего общения:
                             1.Центр кинологии и фелинологии, ветеринарная клиника, зоомагазин"Зоосфера".
                             """;
                     sendMessage(chatId, cynolog);
-                    break;
+                }
                 /*Проверенные вет.центры (для кошек)*/
-                case VET_CENTER_BUTTON:
+                case VET_CENTER_BUTTON -> {
                     String veterinaryCenter = """
                             Проверенные Ветеринарные центры для дальнейшего общения:
                             1.Вет Клиника "Зоолюкс".
@@ -389,9 +382,9 @@ public class TelegramBot extends TelegramLongPollingBot {
                             3.Ветеринарная клиника "Astana".
                             4.Ветеринарная клиника "Aqtaban".""";
                     sendMessage(chatId, veterinaryCenter);
-                    break;
+                }
                 /*Причины отказа*/
-                case REASONS_FOR_REFUSAL_BUTTON:
+                case REASONS_FOR_REFUSAL_BUTTON -> {
                     String refusal = """
                             Список причин, почему могут отказать и не дать забрать животное из приюта:
                             1. Большое количество животных дома.
@@ -401,13 +394,10 @@ public class TelegramBot extends TelegramLongPollingBot {
                             5. Животное в подарок или для работы.
                             """;
                     sendMessage(chatId, refusal);
-                    break;
+                }
                 /*Сохранить контакты того, кто выбрал приют собак*/
-                case SAVE_CONTACT_BUTTON:
-                    sendMessageWithContactKeyboard(chatId);
-                    //написать метод, который дубет сохранять в бд юзеров собак
-                    break;
-                case SUBMIT_REPORT_BUTTON:
+                case SAVE_CONTACT_BUTTON -> createSaveContactButtons(chatId);
+                case SUBMIT_REPORT_BUTTON -> {
                     String infoAboutReport = """
                             Для отчета нужна следующая информация:
                             - Фото животного.  
@@ -422,19 +412,25 @@ public class TelegramBot extends TelegramLongPollingBot {
                             Поведение: ваш текст;""";
                     sendMessage(chatId, infoAboutReport);
                     sendMessage(chatId, reportExample);
-                    break;
+                }
             }
-
         } else if (update.hasMessage() && update.getMessage().hasContact()) {
-            long chatId = update.getMessage().getChatId();
-            if (userCatRepository.findUserCatByChatId(chatId) != null) {
-                saveContactButton(update, false);
-            } else if (userDogRepository.findUserDogByChatId(chatId) != null) {
-                saveContactButton(update, true);
+            Message inMsg = update.getMessage();
+
+            long chatID = update.getMessage().getChatId();
+
+            if (userDogRepository.findUserDogByChatId(chatID) != null
+                    && userDogRepository.findUserDogByChatId(chatID).getPhoneNumber() == null) {
+                saveContactDog(inMsg);
+                sendMessage(chatID, "Данные в приют собак успешно сохранены");
+            } else if (userCatRepository.findUserCatByChatId(chatID) != null
+                    && userCatRepository.findUserCatByChatId(chatID).getPhoneNumber() == null) {
+                saveContactCat(inMsg);
+                sendMessage(chatID, "Данные в приют кошек успешно сохранены");
             }
-            sendMessage(chatId, "Данные успешно сохранены");
         }
     }
+
 
     /**
      * Создание кнопок выбора приюта (собаки или коты)
@@ -451,6 +447,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         List<List<InlineKeyboardButton>> rowsInLine = new ArrayList<>();
         var dogButton = new InlineKeyboardButton();
         dogButton.setText("Собаки");
+
         dogButton.setCallbackData("DOG_BUTTON");
 
         var catButton = new InlineKeyboardButton();
@@ -889,24 +886,10 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     public void sendMessage(long chatId, String textToSend) {
         SendMessage message = new SendMessage(String.valueOf(chatId), textToSend);
-
         try {
             execute(message);
         } catch (TelegramApiException e) {
             log.error("Возникла ошибка: " + e.getMessage());
-        }
-    }
-
-    public void sendMessage(long chatId, String textToSend, ReplyKeyboard keyboard) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(String.valueOf(chatId));
-        sendMessage.setText(textToSend);
-        sendMessage.setReplyMarkup(keyboard);
-        //sendMessage.setParseMode(ParseMode.HTML);
-        try {
-            execute(sendMessage);
-        } catch (TelegramApiException e) {
-            log.error("Error occurred: " + e.getMessage());
         }
     }
 
@@ -932,74 +915,72 @@ public class TelegramBot extends TelegramLongPollingBot {
      * метод, который генерирует рандомный чат-айди одного из волонтёров
      */
     public long generateRandomChatId() {
-        List<Long> chatIdList = List.of(956120008L, 198498708L, 921797425L, 1911144874L, 1837692225L, 5242769604L);
+        List<Long> chatIdList = List.of(956120008L, 198498708L, 921797425L, 1911144874L, 5242769604L);
         int randValue = (int) (Math.random() * chatIdList.size());
         return chatIdList.get(randValue);
     }
 
-    public void sendMessageWithContactKeyboard(long chatId) {
+    /**
+     * метод создания кнопки "Отправить свои контакты", которая запрашивает у пользователя его контактные данные
+     * @param chatId
+     */
+    public void createSaveContactButtons(long chatId) {
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
         replyKeyboardMarkup.setSelective(true);
         replyKeyboardMarkup.setResizeKeyboard(true);
         replyKeyboardMarkup.setOneTimeKeyboard(true);
 
         KeyboardRow keyboardRow1 = new KeyboardRow();
-        KeyboardButton contact = new KeyboardButton("Отправить свои контакты");
-        contact.setRequestContact(true);
-        keyboardRow1.add(contact);
-
-        KeyboardRow keyboardRow2 = new KeyboardRow();
-        keyboardRow2.add("Назад");
+        KeyboardButton contactDog = new KeyboardButton("Button1");
+        contactDog.setText("Отправить свои контакты");
+        contactDog.setRequestContact(true);
+        keyboardRow1.add(contactDog);
 
         List<KeyboardRow> keyboard = new ArrayList<>();
         keyboard.add(keyboardRow1);
-        keyboard.add(keyboardRow2);
 
         replyKeyboardMarkup.setKeyboard(keyboard);
 
-        sendMessage(chatId, "Выберите, что хотите отправить", replyKeyboardMarkup);
-    }
+        SendMessage sndMsg = new SendMessage();
+        sndMsg.setChatId(String.valueOf(chatId));
+        sndMsg.setText("Чтобы Я сохранил ваш номер телефона, нажмите на кнопку \"Отправить свои контакты\"");
+        sndMsg.setReplyMarkup(replyKeyboardMarkup);
 
-    private void saveContactButton(Update update, boolean isDog) {
-        User user = update.getMessage().getFrom();
-        if (!isDog) {
-            UserCat persistentUserCat = userCatRepository.findUserCatByChatId(user.getId());
-            if (persistentUserCat == null) {
-                UserCat transientUserCat = new UserCat();
-                transientUserCat.setChatId(user.getId());
-                transientUserCat.setFirstName(user.getFirstName());
-                transientUserCat.setLastName(user.getLastName());
-                transientUserCat.setUserName(user.getUserName());
-                transientUserCat.setPhoneNumber(update.getMessage().getContact().getPhoneNumber());
-                userCatRepository.save(transientUserCat);
-            } else {
-                persistentUserCat.setChatId(user.getId());
-                persistentUserCat.setFirstName(user.getFirstName());
-                persistentUserCat.setLastName(user.getLastName());
-                persistentUserCat.setUserName(user.getUserName());
-                persistentUserCat.setPhoneNumber(update.getMessage().getContact().getPhoneNumber());
-                userCatRepository.save(persistentUserCat);
-            }
-        } else {
-            UserDog persistentUserDog = userDogRepository.findUserDogByChatId(user.getId());
-            if (persistentUserDog == null) {
-                UserDog transientUserDog = new UserDog();
-                transientUserDog.setChatId(user.getId());
-                transientUserDog.setFirstName(user.getFirstName());
-                transientUserDog.setLastName(user.getLastName());
-                transientUserDog.setUserName(user.getUserName());
-                transientUserDog.setPhoneNumber(update.getMessage().getContact().getPhoneNumber());
-                userDogRepository.save(transientUserDog);
-            } else {
-                persistentUserDog.setChatId(user.getId());
-                persistentUserDog.setFirstName(user.getFirstName());
-                persistentUserDog.setLastName(user.getLastName());
-                persistentUserDog.setUserName(user.getUserName());
-                persistentUserDog.setPhoneNumber(update.getMessage().getContact().getPhoneNumber());
-                userDogRepository.save(persistentUserDog);
-            }
+        try {
+            execute(sndMsg);
+        } catch (TelegramApiException e) {
+            log.error("Error occurred: " + e.getMessage());
         }
     }
+
+    /**
+     * метод, который сохраняет в базу данных приюта собак номер телефона пользователя
+     * @param message в качестве параметра входящее сообщение
+     */
+    public void saveContactDog(Message message) {
+        User thisUser = message.getFrom();
+        UserDog userDog1 = userDogRepository.findUserDogByChatId(thisUser.getId());
+        if (userDog1 != null) {
+            userDog1.setUserName(thisUser.getUserName());
+            userDog1.setPhoneNumber(message.getContact().getPhoneNumber());
+            userDogRepository.save(userDog1);
+        }
+    }
+
+    /**
+     * метод, который сохраняет в базу данных приюта кошек номер телефона пользователя
+     * @param message в качестве параметра входящее сообщение
+     */
+    public void saveContactCat(Message message) {
+        User thisUser = message.getFrom();
+        UserCat userCat1 = userCatRepository.findUserCatByChatId(thisUser.getId());
+        if (userCat1 != null) {
+            userCat1.setUserName(thisUser.getUserName());
+            userCat1.setPhoneNumber(message.getContact().getPhoneNumber());
+            userCatRepository.save(userCat1);
+        }
+    }
+
 
     public void getReport(Update update) {
         Pattern pattern = Pattern.compile(REGEX_MESSAGE);
@@ -1012,4 +993,5 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
 }
+
 
