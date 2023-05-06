@@ -77,13 +77,13 @@ public class ReportDogServiceTest {
     }
 
     @Test
-    public void deleteReportById() {
+    public void deleteReportByIdTest() {
         reportDogService.deleteById(anyLong());
         verify(reportDogRepository).deleteById(anyLong());
     }
 
     @Test
-    public void findAllReportsByUserDogChatId() {
+    public void findAllReportsByUserDogChatIdTest() {
         ReportDog reportDog1 = new ReportDog(1L, "infoMessageTest", "photoIdTest", new UserDog());
         ReportDog reportDog2 = new ReportDog(2L, "infoMessageTest2", "photoIdTest2", new UserDog());
         ReportDog reportDog3 = new ReportDog(3L, "infoMessageTest3", "photoIdTest3", new UserDog());

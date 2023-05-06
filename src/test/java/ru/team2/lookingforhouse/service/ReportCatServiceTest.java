@@ -80,13 +80,13 @@ public class ReportCatServiceTest {
     }
 
     @Test
-    public void deleteReportById() {
+    public void deleteReportByIdTest() {
         reportCatService.deleteById(anyLong());
         verify(reportCatRepository).deleteById(anyLong());
     }
 
     @Test
-    public void findAllReportsByUserCatChatId() {
+    public void findAllReportsByUserCatChatIdTest() {
         ReportCat reportCat1 = new ReportCat(1L, "infoMessageTest", "photoIdTest", new UserCat());
         ReportCat reportCat2 = new ReportCat(2L, "infoMessageTest2", "photoIdTest2", new UserCat());
         ReportCat reportCat3 = new ReportCat(3L, "infoMessageTest3", "photoIdTest3", new UserCat());

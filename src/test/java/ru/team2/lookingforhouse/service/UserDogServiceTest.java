@@ -5,6 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import ru.team2.lookingforhouse.exception.UserDogNotFoundException;
 import ru.team2.lookingforhouse.model.UserDog;
 import ru.team2.lookingforhouse.repository.UserDogRepository;
 import ru.team2.lookingforhouse.util.UserStatus;
@@ -15,9 +16,11 @@ import java.util.Collection;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class UserDogServiceTest {
@@ -100,7 +103,7 @@ public class UserDogServiceTest {
     }
 
     @Test
-    public void getAllByChatIdTest() {
+    public void findAllByChatIdTest() {
         List<UserDog> expected = new ArrayList<>();
         UserDog userDog1 = new UserDog(123L,
                 "testFirstName",
@@ -139,5 +142,21 @@ public class UserDogServiceTest {
 
         assertThat(actual.size()).isEqualTo(expected.size());
         assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    public void deleteByIdTest() {
+        userDogService.deleteById(anyLong());
+        verify(userDogRepository).deleteById(anyLong());
+    }
+
+    @Test
+    public void updateWithExceptionTest() {
+        UserDog expected = new UserDog();
+        expected.setChatId(null);
+        assertThatThrownBy(() -> userDogService.update(expected))
+                .isInstanceOf(UserDogNotFoundException.class)
+                .hasMessage("Мы не нашли такого пользователя!");
+        verify(userDogRepository, never()).save(expected);
     }
 }

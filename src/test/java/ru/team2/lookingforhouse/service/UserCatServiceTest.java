@@ -5,6 +5,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import ru.team2.lookingforhouse.exception.UserCatNotFoundException;
+import ru.team2.lookingforhouse.exception.UserDogNotFoundException;
 import ru.team2.lookingforhouse.model.UserCat;
 import ru.team2.lookingforhouse.repository.UserCatRepository;
 import ru.team2.lookingforhouse.util.UserStatus;
@@ -15,6 +17,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -139,5 +142,21 @@ public class UserCatServiceTest {
         assertThat(actual.size()).isEqualTo(expected.size());
         assertThat(actual).isEqualTo(expected);
 
+    }
+
+    @Test
+    public void deleteByIdTest() {
+        userCatService.deleteById(anyLong());
+        verify(userCatRepository).deleteById(anyLong());
+    }
+
+    @Test
+    public void updateWithExceptionTest() {
+        UserCat expected = new UserCat();
+        expected.setChatId(null);
+        assertThatThrownBy(() -> userCatService.update(expected))
+                .isInstanceOf(UserCatNotFoundException.class)
+                .hasMessage("Мы не нашли такого пользователя!");
+        verify(userCatRepository, never()).save(expected);
     }
 }
