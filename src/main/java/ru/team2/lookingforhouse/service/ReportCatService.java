@@ -116,32 +116,4 @@ public class ReportCatService {
         return this.reportCatRepository.findAllByUserCat_ChatId(chatId);
     }
 
-//Возможно и не понадобится этот метод...
-
-    /**
-     * Метод получения списка всех объектов "Отчет данных пользователя, интересующегося котом" с параметрами: номер страницы и количество страниц.
-     *
-     * @param pageNumber
-     * @param pageSize
-     * @return {@link ReportCatRepository#findAll()}
-     * @see ReportCatService
-     */
-    public List<ReportCat> getAllReports(Integer pageNumber, Integer pageSize) {
-        log.info("Был вызван метод получения списка всех объектов \"Отчет данных пользователя, интересующегося котом\" с параметрами");
-        PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
-        return this.reportCatRepository.findAll(pageRequest).getContent();
-    }
-
-//Возможно и не понадобится этот метод...
-
-    /**
-     * Метод получения расширения файла.
-     *
-     * @param fileName
-     * @see ReportCatService
-     */
-    private String getExtensions(String fileName) {
-        log.info("Был вызван метод получения расширения файла");
-        return fileName.substring(fileName.lastIndexOf(".") + 1);
-    }
 }

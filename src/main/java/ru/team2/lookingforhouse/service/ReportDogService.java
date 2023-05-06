@@ -116,33 +116,4 @@ public class ReportDogService {
         log.info("Был вызван метод  получения списка всех объектов \"Отчет данных пользователя, интересующегося собакой\" по chatId={}", chatId);
         return this.reportDogRepository.findAllByUserDog_ChatId(chatId);
     }
-
-//Возможно и не понадобится этот метод...
-
-    /**
-     * Метод получения списка всех объектов "Отчет данных пользователя, интересующегося собакой" с параметрами: номер страницы и количество страниц.
-     *
-     * @param pageNumber
-     * @param pageSize
-     * @return {@link ReportDogRepository#findAll()}
-     * @see ReportDogService
-     */
-    public List<ReportDog> getAllReports(Integer pageNumber, Integer pageSize) {
-        log.info("Был вызван метод получения списка всех объектов \"Отчет данных пользователя, интересующегося собакой\" с параметрами");
-        PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
-        return this.reportDogRepository.findAll(pageRequest).getContent();
-    }
-
-//Возможно и не понадобится этот метод...
-
-    /**
-     * Метод получения расширения файла.
-     *
-     * @param fileName
-     * @see ReportDogService
-     */
-    private String getExtensions(String fileName) {
-        log.info("Был вызван метод получения расширения файла");
-        return fileName.substring(fileName.lastIndexOf(".") + 1);
-    }
 }

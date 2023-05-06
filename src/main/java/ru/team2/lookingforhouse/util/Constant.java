@@ -1,10 +1,5 @@
 package ru.team2.lookingforhouse.util;
 
-import org.telegram.telegrambots.meta.api.objects.Update;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public class Constant {
 
     public static final String DOG_BUTTON = "DOG_BUTTON";
@@ -42,7 +37,6 @@ public class Constant {
     public static final String REASONS_FOR_REFUSAL_BUTTON = "REASONS_FOR_REFUSAL_BUTTON";
     public static final String SAVE_CONTACT_BUTTON = "SAVE_CONTACT_BUTTON";
 
-
     public static final String REGEX_MESSAGE_DOG = """
             (Отчёт для приюта собак:
             Рацион:)(\\s)(\\W+)(;)
@@ -54,7 +48,4 @@ public class Constant {
             Рацион:)(\\s)(\\W+)(;)
             (Самочувствие:)(\\s)(\\W+)(;)
             (Поведение:)(\\s)(\\W+)(;)""";
-
-
-
 }
