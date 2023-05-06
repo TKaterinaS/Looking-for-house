@@ -2,12 +2,15 @@ package ru.team2.lookingforhouse.service;
 
 import com.vdurmont.emoji.EmojiParser;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.buf.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.GetFile;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.api.objects.*;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
@@ -20,9 +23,12 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import ru.team2.lookingforhouse.config.BotConfig;
+import ru.team2.lookingforhouse.model.ReportCat;
 import ru.team2.lookingforhouse.model.ReportDog;
 import ru.team2.lookingforhouse.model.UserCat;
 import ru.team2.lookingforhouse.model.UserDog;
+import ru.team2.lookingforhouse.repository.ReportCatRepository;
+import ru.team2.lookingforhouse.repository.ReportDogRepository;
 import ru.team2.lookingforhouse.repository.UserCatRepository;
 import ru.team2.lookingforhouse.repository.UserDogRepository;
 
@@ -42,12 +48,19 @@ import static ru.team2.lookingforhouse.util.UserStatus.*;
 public class TelegramBot extends TelegramLongPollingBot {
     private final UserCatRepository userCatRepository;
     private final UserDogRepository userDogRepository;
+    private final ReportCatRepository reportCatRepository;
+    private final ReportDogRepository reportDogRepository;
     private final BotConfig config;
+    private final Pattern patternDog = Pattern.compile(REGEX_MESSAGE_DOG);
+    private final Pattern patternCat = Pattern.compile(REGEX_MESSAGE_CAT);
 
     @Autowired
-    public TelegramBot(BotConfig config, UserCatRepository userCatRepository, UserDogRepository userDogRepository) {
+    public TelegramBot(BotConfig config, UserCatRepository userCatRepository, UserDogRepository userDogRepository,
+                       ReportCatRepository reportCatRepository, ReportDogRepository reportDogRepository) {
         this.userCatRepository = userCatRepository;
         this.userDogRepository = userDogRepository;
+        this.reportCatRepository = reportCatRepository;
+        this.reportDogRepository = reportDogRepository;
         this.config = config;
 //         Создание кнопки меню (все команды должны быть написаны в нижнем регистре)
         List<BotCommand> listOfCommands = new ArrayList<>();
@@ -74,6 +87,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
+
         if (update.hasMessage() && update.getMessage().hasText()) {
             String messageText = update.getMessage().getText();
             String userName = update.getMessage().getChat().getFirstName();
@@ -397,7 +411,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 }
                 /*Сохранить контакты того, кто выбрал приют собак*/
                 case SAVE_CONTACT_BUTTON -> createSaveContactButtons(chatId);
-                case SUBMIT_REPORT_BUTTON -> {
+                case SUBMIT_REPORT_DOG_BUTTON -> {
                     String infoAboutReport = """
                             Для отчета нужна следующая информация:
                             - Фото животного.  
@@ -407,6 +421,24 @@ public class TelegramBot extends TelegramLongPollingBot {
                             Скопируйте следующий пример. Не забудьте прикрепить фото
                             """;
                     String reportExample = """
+                            Отчёт для приюта собак:
+                            Рацион: ваш текст;
+                            Самочувствие: ваш текст;
+                            Поведение: ваш текст;""";
+                    sendMessage(chatId, infoAboutReport);
+                    sendMessage(chatId, reportExample);
+                }
+                case SUBMIT_REPORT_CAT_BUTTON -> {
+                    String infoAboutReport = """
+                            Для отчета нужна следующая информация:
+                            - Фото животного.  
+                            - Рацион животного
+                            - Общее самочувствие и привыкание к новому месту
+                            - Изменение в поведении: отказ от старых привычек, приобретение новых.
+                            Скопируйте следующий пример. Не забудьте прикрепить фото
+                            """;
+                    String reportExample = """
+                            Отчёт для приюта кошек:
                             Рацион: ваш текст;
                             Самочувствие: ваш текст;
                             Поведение: ваш текст;""";
@@ -416,9 +448,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             }
         } else if (update.hasMessage() && update.getMessage().hasContact()) {
             Message inMsg = update.getMessage();
-
             long chatID = update.getMessage().getChatId();
-
             if (userDogRepository.findUserDogByChatId(chatID) != null
                     && userDogRepository.findUserDogByChatId(chatID).getPhoneNumber() == null) {
                 saveContactDog(inMsg);
@@ -428,6 +458,16 @@ public class TelegramBot extends TelegramLongPollingBot {
                 saveContactCat(inMsg);
                 sendMessage(chatID, "Данные в приют кошек успешно сохранены");
             }
+
+        } else if (update.hasMessage() && update.getMessage().hasPhoto() && update.getMessage().getCaption() != null) {
+            String caption = update.getMessage().getCaption();
+            long chatId = update.getMessage().getChatId();
+            getReport(update, caption);
+
+        } else if (update.hasMessage() && update.getMessage().hasPhoto() && update.getMessage().getCaption() == null) {
+            long chatId = update.getMessage().getChatId();
+            sendMessage(chatId, "Необходимо к фото питомца добавить текстовый отчёт по шаблону");
+
         }
     }
 
@@ -442,7 +482,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         message.setChatId(String.valueOf(chatId));
         String answer = EmojiParser.parseToUnicode("Выберете приют собак " + ":dog: " + " или кошек " + " :cat:");
         message.setText(answer);
-
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInLine = new ArrayList<>();
         var dogButton = new InlineKeyboardButton();
@@ -492,7 +531,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         var submitReportButton = new InlineKeyboardButton();
         submitReportButton.setText("Прислать отчет о питомце");
-        submitReportButton.setCallbackData(SUBMIT_REPORT_BUTTON);
+        submitReportButton.setCallbackData(SUBMIT_REPORT_DOG_BUTTON);
 
         var callVolunteerButton = new InlineKeyboardButton();
         callVolunteerButton.setText("Позвать волонтера");
@@ -544,7 +583,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         var submitReportButton = new InlineKeyboardButton();
         submitReportButton.setText("Прислать отчет о питомце");
-        submitReportButton.setCallbackData(SUBMIT_REPORT_BUTTON);
+        submitReportButton.setCallbackData(SUBMIT_REPORT_CAT_BUTTON);
 
         var callVolunteerButton = new InlineKeyboardButton();
         callVolunteerButton.setText("Позвать волонтера");
@@ -922,6 +961,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     /**
      * метод создания кнопки "Отправить свои контакты", которая запрашивает у пользователя его контактные данные
+     *
      * @param chatId
      */
     public void createSaveContactButtons(long chatId) {
@@ -955,13 +995,13 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     /**
      * метод, который сохраняет в базу данных приюта собак номер телефона пользователя
+     *
      * @param message в качестве параметра входящее сообщение
      */
     public void saveContactDog(Message message) {
-        User thisUser = message.getFrom();
-        UserDog userDog1 = userDogRepository.findUserDogByChatId(thisUser.getId());
+        UserDog userDog1 = userDogRepository.findUserDogByChatId(message.getChatId());
         if (userDog1 != null) {
-            userDog1.setUserName(thisUser.getUserName());
+            userDog1.setUserName(message.getFrom().getUserName());
             userDog1.setPhoneNumber(message.getContact().getPhoneNumber());
             userDogRepository.save(userDog1);
         }
@@ -969,6 +1009,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     /**
      * метод, который сохраняет в базу данных приюта кошек номер телефона пользователя
+     *
      * @param message в качестве параметра входящее сообщение
      */
     public void saveContactCat(Message message) {
@@ -981,14 +1022,45 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
+    /**
+     * метод сохранения отчёта о питомце
+     * @param update первый параметр это сам апдейт
+     * @param caption второй параметр - описание к изображению, которое содержится в сообщении
+     */
+    public void getReport(Update update, String caption) {
+        Matcher matcherDog = patternDog.matcher(caption);
+        Matcher matcherCat = patternCat.matcher(caption);
+        long chatId = update.getMessage().getChatId();
+        String photoId = update.getMessage().getPhoto().get(1).getFileId();
+        UserDog userDog = userDogRepository.findUserDogByChatId(chatId);
+        UserCat userCat = userCatRepository.findUserCatByChatId(chatId);
 
-    public void getReport(Update update) {
-        Pattern pattern = Pattern.compile(REGEX_MESSAGE);
-        Matcher matcher = pattern.matcher(update.getMessage().getCaption());
-        if (matcher.matches()) {
-            String ration = matcher.group(3);
-            String health = matcher.group(7);
-            String habits = matcher.group(11);
+        if (matcherDog.find()) {
+            String ration = matcherDog.group(3);
+            String health = matcherDog.group(7);
+            String habits = matcherDog.group(11);
+            String infoMessage = ration + "\n" + "\n" + habits + "\n" + health;
+            ReportDog reportDog = new ReportDog();
+            reportDog.setPhotoId(photoId);
+            reportDog.setInfoMessage(infoMessage);
+            reportDog.setUserDog(userDog);
+            reportDogRepository.save(reportDog);
+            sendMessage(chatId,
+                    "Ваш отчёт для приюта собак принят! " +
+                            "Не забывайте отправлять отчёт каждый день в течение испытательного срока (30 дней)");
+        } else if (matcherCat.find()) {
+            String ration = matcherCat.group(3);
+            String health = matcherCat.group(7);
+            String habits = matcherCat.group(11);
+            String infoMessage = ration + "\n" + "\n" + habits + "\n" + health;
+            ReportCat reportCat = new ReportCat();
+            reportCat.setPhotoId(photoId);
+            reportCat.setInfoMessage(infoMessage);
+            reportCat.setUserCat(userCat);
+            reportCatRepository.save(reportCat);
+            sendMessage(chatId,
+                    "Ваш отчёт для приюта кошек принят! " +
+                            "Не забывайте отправлять отчёт каждый день в течение испытательного срока (30 дней)");
         }
     }
 

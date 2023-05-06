@@ -6,17 +6,18 @@ import org.mockito.*;
 import org.mockito.internal.verification.Times;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import org.telegram.telegrambots.meta.api.objects.Chat;
-import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.*;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.team2.lookingforhouse.config.BotConfig;
 import com.vdurmont.emoji.EmojiParser;
 import ru.team2.lookingforhouse.model.UserCat;
 import ru.team2.lookingforhouse.model.UserDog;
+import ru.team2.lookingforhouse.repository.ReportCatRepository;
+import ru.team2.lookingforhouse.repository.ReportDogRepository;
 import ru.team2.lookingforhouse.repository.UserCatRepository;
 import ru.team2.lookingforhouse.repository.UserDogRepository;
+
+import java.util.ArrayList;
 
 import static ru.team2.lookingforhouse.util.Constant.*;
 
@@ -31,6 +32,10 @@ public class TelegramBotTest {
     private UserCatRepository userCatRepository;
     @Mock
     private UserDogRepository userDogRepository;
+    @Mock
+    private ReportCatRepository reportCatRepository;
+    @Mock
+    private ReportDogRepository reportDogRepository;
     @Spy
     @InjectMocks
     private TelegramBot telegramBot;
@@ -797,14 +802,15 @@ public class TelegramBotTest {
         verify(telegramBot).execute(argumentCaptor.capture());
         SendMessage actual = argumentCaptor.getValue();
         assertThat(actual.getChatId()).isEqualTo(update.getCallbackQuery().getMessage().getChatId().toString());
-        assertThat(actual.getText()).isEqualTo("Выберите, что хотите отправить");
+        assertThat(actual.getText())
+                .isEqualTo("Чтобы Я сохранил ваш номер телефона, нажмите на кнопку \"Отправить свои контакты\"");
     }
 
     @Test
-    public void handlesSubmitReportButtonTest() throws TelegramApiException {
+    public void handlesSubmitReportDogButtonTest() throws TelegramApiException {
         Update update = new Update();
         update.setCallbackQuery(new CallbackQuery());
-        update.getCallbackQuery().setData(SUBMIT_REPORT_BUTTON);
+        update.getCallbackQuery().setData(SUBMIT_REPORT_DOG_BUTTON);
         update.getCallbackQuery().setMessage(new Message());
         update.getCallbackQuery().getMessage().setMessageId(1);
         update.getCallbackQuery().getMessage().setChat(new Chat());
@@ -816,10 +822,186 @@ public class TelegramBotTest {
         verify(telegramBot, times(2)).execute(argumentCaptor.capture());
         SendMessage actual = argumentCaptor.getValue();
         assertThat(actual.getChatId()).isEqualTo(update.getCallbackQuery().getMessage().getChatId().toString());
-        assertThat(actual.getText()).isEqualTo("""
-                Рацион: ваш текст;
-                Самочувствие: ваш текст;
-                Поведение: ваш текст;""");
+        assertThat(actual.getText())
+                .isEqualTo("""
+                        Отчёт для приюта собак:
+                        Рацион: ваш текст;
+                        Самочувствие: ваш текст;
+                        Поведение: ваш текст;""");
     }
 
+    @Test
+    public void handlesSubmitReportCatButtonTest() throws TelegramApiException {
+        Update update = new Update();
+        update.setCallbackQuery(new CallbackQuery());
+        update.getCallbackQuery().setData(SUBMIT_REPORT_CAT_BUTTON);
+        update.getCallbackQuery().setMessage(new Message());
+        update.getCallbackQuery().getMessage().setMessageId(1);
+        update.getCallbackQuery().getMessage().setChat(new Chat());
+        update.getCallbackQuery().getMessage().getChat().setId(123L);
+
+        telegramBot.onUpdateReceived(update);
+
+        ArgumentCaptor<SendMessage> argumentCaptor = ArgumentCaptor.forClass(SendMessage.class);
+        verify(telegramBot, times(2)).execute(argumentCaptor.capture());
+        SendMessage actual = argumentCaptor.getValue();
+        assertThat(actual.getChatId()).isEqualTo(update.getCallbackQuery().getMessage().getChatId().toString());
+        assertThat(actual.getText())
+                .isEqualTo("""
+                        Отчёт для приюта кошек:
+                        Рацион: ваш текст;
+                        Самочувствие: ваш текст;
+                        Поведение: ваш текст;""");
+    }
+
+    @Test
+    public void saveContactTest() throws TelegramApiException {
+        Update update = new Update();
+        update.setCallbackQuery(new CallbackQuery());
+        update.getCallbackQuery().setData(SAVE_CONTACT_BUTTON);
+        update.getCallbackQuery().setMessage(new Message());
+        update.getCallbackQuery().getMessage().setMessageId(1);
+        update.getCallbackQuery().getMessage().setChat(new Chat());
+        update.getCallbackQuery().getMessage().getChat().setId(123L);
+
+        telegramBot.onUpdateReceived(update);
+
+        ArgumentCaptor<SendMessage> argumentCaptor = ArgumentCaptor.forClass(SendMessage.class);
+        verify(telegramBot).execute(argumentCaptor.capture());
+        SendMessage actual = argumentCaptor.getValue();
+        assertThat(actual.getChatId()).isEqualTo(update.getCallbackQuery().getMessage().getChatId().toString());
+        assertThat(actual.getText())
+                .isEqualTo("Чтобы Я сохранил ваш номер телефона, нажмите на кнопку \"Отправить свои контакты\"");
+
+    }
+
+    @Test
+    public void ifUpdateHasContactTest() throws TelegramApiException {
+        Update update = new Update();
+        update.hasMessage();
+        update.setMessage(new Message());
+        update.getMessage().setMessageId(1);
+        update.getMessage().setChat(new Chat());
+        update.getMessage().getChat().setId(123L);
+        update.getMessage().setFrom(new User());
+        update.getMessage().getFrom().setUserName("userNameTest");
+        update.getMessage().setContact(new Contact());
+        update.getMessage().getContact().setPhoneNumber("+79123456789");
+        when(userDogRepository.findUserDogByChatId(123L)).thenReturn(new UserDog());
+
+        telegramBot.onUpdateReceived(update);
+
+        ArgumentCaptor<SendMessage> argumentCaptor = ArgumentCaptor.forClass(SendMessage.class);
+        verify(telegramBot).execute(argumentCaptor.capture());
+        SendMessage actual = argumentCaptor.getValue();
+        assertThat(actual.getChatId()).isEqualTo(update.getMessage().getChatId().toString());
+        assertThat(actual.getText())
+                .isEqualTo("Данные в приют собак успешно сохранены");
+    }
+
+    @Test
+    public void ifUpdateHasContactCatTest() throws TelegramApiException {
+        Update update = new Update();
+        update.hasMessage();
+        update.setMessage(new Message());
+        update.getMessage().setMessageId(1);
+        update.getMessage().setChat(new Chat());
+        update.getMessage().getChat().setId(123L);
+        update.getMessage().setFrom(new User());
+        update.getMessage().getFrom().setUserName("userNameTest");
+        update.getMessage().setContact(new Contact());
+        update.getMessage().getContact().setPhoneNumber("+79123456789");
+        when(userCatRepository.findUserCatByChatId(123L)).thenReturn(new UserCat());
+
+        telegramBot.onUpdateReceived(update);
+
+        ArgumentCaptor<SendMessage> argumentCaptor = ArgumentCaptor.forClass(SendMessage.class);
+        verify(telegramBot).execute(argumentCaptor.capture());
+        SendMessage actual = argumentCaptor.getValue();
+        assertThat(actual.getChatId()).isEqualTo(update.getMessage().getChatId().toString());
+        assertThat(actual.getText())
+                .isEqualTo("Данные в приют кошек успешно сохранены");
+    }
+
+    @Test
+    public void ifUpdateHasPhotoAndCaptionDogTest() throws TelegramApiException {
+        Update update = new Update();
+        update.setMessage(new Message());
+        update.getMessage().setChat(new Chat());
+        update.getMessage().getChat().setId(123L);
+        update.getMessage().setPhoto(new ArrayList<>());
+        update.getMessage().getPhoto().add(new PhotoSize());
+        update.getMessage().getPhoto().add(new PhotoSize());
+        update.getMessage().getPhoto().add(new PhotoSize());
+        update.getMessage().getPhoto().set(1,new PhotoSize());
+
+        update.getMessage().setCaption("""
+                            Отчёт для приюта собак:
+                            Рацион: ваш текст;
+                            Самочувствие: ваш текст;
+                            Поведение: ваш текст;""");
+        when(userDogRepository.findUserDogByChatId(123L)).thenReturn(new UserDog());
+
+        telegramBot.onUpdateReceived(update);
+
+        ArgumentCaptor<SendMessage> argumentCaptor = ArgumentCaptor.forClass(SendMessage.class);
+        verify(telegramBot).execute(argumentCaptor.capture());
+        SendMessage actual = argumentCaptor.getValue();
+        assertThat(actual.getChatId()).isEqualTo(update.getMessage().getChatId().toString());
+        assertThat(actual.getText())
+                .isEqualTo("Ваш отчёт для приюта собак принят! " +
+                        "Не забывайте отправлять отчёт каждый день в течение испытательного срока (30 дней)");
+    }
+
+    @Test
+    public void ifUpdateHasPhotoAndCaptionCatTest() throws TelegramApiException {
+        Update update = new Update();
+        update.setMessage(new Message());
+        update.getMessage().setChat(new Chat());
+        update.getMessage().getChat().setId(123L);
+        update.getMessage().setPhoto(new ArrayList<>());
+        update.getMessage().getPhoto().add(new PhotoSize());
+        update.getMessage().getPhoto().add(new PhotoSize());
+        update.getMessage().getPhoto().add(new PhotoSize());
+        update.getMessage().getPhoto().set(1,new PhotoSize());
+
+        update.getMessage().setCaption("""
+                            Отчёт для приюта кошек:
+                            Рацион: ваш текст;
+                            Самочувствие: ваш текст;
+                            Поведение: ваш текст;""");
+        when(userCatRepository.findUserCatByChatId(123L)).thenReturn(new UserCat());
+
+        telegramBot.onUpdateReceived(update);
+
+        ArgumentCaptor<SendMessage> argumentCaptor = ArgumentCaptor.forClass(SendMessage.class);
+        verify(telegramBot).execute(argumentCaptor.capture());
+        SendMessage actual = argumentCaptor.getValue();
+        assertThat(actual.getChatId()).isEqualTo(update.getMessage().getChatId().toString());
+        assertThat(actual.getText())
+                .isEqualTo("Ваш отчёт для приюта кошек принят! " +
+                        "Не забывайте отправлять отчёт каждый день в течение испытательного срока (30 дней)");
+    }
+
+    @Test
+    public void ifUpdateHasPhotoButHasNotCaption() throws TelegramApiException {
+        Update update = new Update();
+        update.setMessage(new Message());
+        update.getMessage().setChat(new Chat());
+        update.getMessage().getChat().setId(123L);
+        update.getMessage().setPhoto(new ArrayList<>());
+        update.getMessage().getPhoto().add(new PhotoSize());
+        update.getMessage().getPhoto().add(new PhotoSize());
+        update.getMessage().getPhoto().add(new PhotoSize());
+        update.getMessage().getPhoto().set(1,new PhotoSize());
+
+        telegramBot.onUpdateReceived(update);
+
+        ArgumentCaptor<SendMessage> argumentCaptor = ArgumentCaptor.forClass(SendMessage.class);
+        verify(telegramBot).execute(argumentCaptor.capture());
+        SendMessage actual = argumentCaptor.getValue();
+        assertThat(actual.getChatId()).isEqualTo(update.getMessage().getChatId().toString());
+        assertThat(actual.getText())
+                .isEqualTo("Необходимо к фото питомца добавить текстовый отчёт по шаблону");
+    }
 }
